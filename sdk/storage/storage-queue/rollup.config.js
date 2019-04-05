@@ -57,7 +57,8 @@ const browserRollupConfigFactory = isProduction => {
             nodeResolve({
                 module: true,
                 browser: true,
-                preferBuiltins: false
+                preferBuiltins: false,
+                main: false
             }),
             commonjs({
                 namedExports: {

@@ -32,6 +32,7 @@
     "es6-promise": "^4.2.5",
     "gulp": "^4.0.0",
     "gulp-zip": "^4.2.0",
+    "inherits": "^2.0.3",
     "karma": "^4.0.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
@@ -60,7 +61,8 @@
     "rollup-plugin-visualizer": "^1.0.0",
     "source-map-support": "^0.5.9",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "util": "^0.11.1"
   },
   "scripts": {
     "unit-node": "npm run build && npm run test:node",
