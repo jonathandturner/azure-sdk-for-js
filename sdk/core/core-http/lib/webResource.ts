@@ -66,6 +66,7 @@ export class WebResource {
   withCredentials: boolean;
   timeout: number;
   proxySettings?: ProxySettings;
+  spanOptions?: any;
 
   abortSignal?: AbortSignalLike;
 

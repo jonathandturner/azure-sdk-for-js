@@ -38,6 +38,7 @@ import {
 import { KeyVaultClient } from "./core/keyVaultClient";
 import { RetryConstants, SDK_VERSION } from "./core/utils/constants";
 import { challengeBasedAuthenticationPolicy } from "./core/challengeBasedAuthenticationPolicy";
+import { KeyVaultClientCreateKeyOptionalParams } from "./core/models";
 
 import {
   NewPipelineOptions,
@@ -72,6 +73,7 @@ import {
   WrapResult,
   UnwrapResult
 } from "./cryptographyClient";
+import {tracingPolicy} from "./core/tracingPolicy";
 
 export {
   CreateEcKeyOptions,
@@ -152,6 +154,7 @@ export class KeysClient {
         retryOptions.maxRetryDelayInMs
       ),
       redirectPolicy(),
+      tracingPolicy(),
       isTokenCredential(credential)
         ? challengeBasedAuthenticationPolicy(credential)
         : signingPolicy(credential)
@@ -265,7 +268,7 @@ export class KeysClient {
         notBefore: options.notBefore,
         expires: options.expires
       };
-      const unflattenedOptions = {
+      const unflattenedOptions: KeyVaultClientCreateKeyOptionalParams = {
         ...options,
         ...(options.requestOptions ? options.requestOptions : {}),
         keyAttributes: unflattenedAttributes
@@ -275,6 +278,8 @@ export class KeysClient {
       delete unflattenedOptions.notBefore;
       delete unflattenedOptions.expires;
       delete unflattenedOptions.requestOptions;
+
+      unflattenedOptions.spanOptions = "foobar";
 
       const response = await this.client.createKey(
         this.vaultBaseUrl,
