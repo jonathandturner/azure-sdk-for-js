@@ -337,7 +337,10 @@ export class ServiceClient {
         }
 
         if (options.spanOptions) {
+          console.log("Setting span options: ", options.spanOptions);
           httpRequest.spanOptions = options.spanOptions;
+        } else {
+          console.log("No span options give");
         }
       }
 

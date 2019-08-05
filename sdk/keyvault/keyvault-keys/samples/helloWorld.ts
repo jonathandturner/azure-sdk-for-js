@@ -17,32 +17,32 @@ async function main(): Promise<void> {
   const rsaKeyName = "MyRSAKeyName";
 
   // You can create keys using the general method
-  const result = await client.createKey(keyName, "EC");
+  const result = await client.createKey(keyName, "EC", {requestOptions: {spanOptions: "Helloworld"}});
   console.log("key: ", result);
 
   // Or using specialized key creation methods
-  const ecResult = await client.createEcKey(ecKeyName, { curve: "P-256" });
-  const rsaResult = await client.createRsaKey(rsaKeyName, { keySize: 2048 });
-  console.log("Elliptic curve key: ", ecResult);
-  console.log("RSA Key: ", rsaResult);
+  // const ecResult = await client.createEcKey(ecKeyName, { curve: "P-256" });
+  // const rsaResult = await client.createRsaKey(rsaKeyName, { keySize: 2048 });
+  // console.log("Elliptic curve key: ", ecResult);
+  // console.log("RSA Key: ", rsaResult);
 
-  // Get a specific key
-  const key = await client.getKey(keyName);
-  console.log("key: ", key);
+  // // Get a specific key
+  // const key = await client.getKey(keyName);
+  // console.log("key: ", key);
 
-  // Or list the keys we have
-  for await (const keyAttributes of client.listKeys()) {
-    const key = await client.getKey(keyAttributes.name);
-    console.log("key: ", key);
-  }
+  // // Or list the keys we have
+  // for await (const keyAttributes of client.listKeys()) {
+  //   const key = await client.getKey(keyAttributes.name);
+  //   console.log("key: ", key);
+  // }
 
-  // Update the key
-  const updatedKey = await client.updateKey(keyName, result.version, { enabled: false });
-  console.log("updated key: ", updatedKey);
+  // // Update the key
+  // const updatedKey = await client.updateKey(keyName, result.version, { enabled: false });
+  // console.log("updated key: ", updatedKey);
 
-  await client.deleteKey(keyName);
-  await client.deleteKey(ecKeyName);
-  await client.deleteKey(rsaKeyName);
+  // await client.deleteKey(keyName);
+  // await client.deleteKey(ecKeyName);
+  // await client.deleteKey(rsaKeyName);
 }
 
 main().catch((err) => {
