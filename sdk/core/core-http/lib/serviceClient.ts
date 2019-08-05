@@ -208,6 +208,8 @@ export class ServiceClient {
       return Promise.reject(error);
     }
 
+    console.log("httpRequest: ", httpRequest.spanOptions);
+
     let httpPipeline: RequestPolicy = this._httpClient;
     if (this._requestPolicyFactories && this._requestPolicyFactories.length > 0) {
       for (let i = this._requestPolicyFactories.length - 1; i >= 0; --i) {

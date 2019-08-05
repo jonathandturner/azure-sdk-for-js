@@ -44,7 +44,10 @@ export class TracingPolicy extends BaseRequestPolicy {
   public async sendRequest(
     request: WebResource
   ): Promise<HttpOperationResponse> {
-    console.log("tracing value:", request.spanOptions);
+    if (request.spanOptions) {
+      console.log("tracing policy:", request.spanOptions);
+      request.headers.set("traceparent", request.spanOptions.parent._span );
+    }
     return this._nextPolicy.sendRequest(request);
   }
 }

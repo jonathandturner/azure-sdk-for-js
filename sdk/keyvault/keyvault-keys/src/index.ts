@@ -144,6 +144,7 @@ export class KeysClient {
       );
     }
     requestPolicyFactories = requestPolicyFactories.concat([
+      tracingPolicy(),
       userAgentPolicy({ value: userAgentString }),
       generateClientRequestIdPolicy(),
       deserializationPolicy(), // Default deserializationPolicy is provided by protocol layer
@@ -156,10 +157,9 @@ export class KeysClient {
         retryOptions.maxRetryDelayInMs
       ),
       redirectPolicy(),
-      tracingPolicy(),
       isTokenCredential(credential)
         ? challengeBasedAuthenticationPolicy(credential)
-        : signingPolicy(credential)
+        : signingPolicy(credential),
     ]);
 
     return {

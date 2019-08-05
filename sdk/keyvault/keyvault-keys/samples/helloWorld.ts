@@ -17,7 +17,7 @@ async function main(): Promise<void> {
   const rsaKeyName = "MyRSAKeyName";
 
   // You can create keys using the general method
-  const result = await client.createKey(keyName, "EC", {requestOptions: {spanOptions: "Helloworld"}});
+  const result = await client.createKey(keyName, "EC");
   console.log("key: ", result);
 
   // Or using specialized key creation methods

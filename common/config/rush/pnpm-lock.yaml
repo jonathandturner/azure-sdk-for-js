@@ -10,6 +10,7 @@ dependencies:
   '@azure/ms-rest-js': 2.0.4
   '@azure/ms-rest-nodeauth': 0.9.3
   '@microsoft/api-extractor': 7.3.4
+  '@opencensus/nodejs': 0.0.16
   '@rush-temp/abort-controller': 'file:projects/abort-controller.tgz'
   '@rush-temp/core-amqp': 'file:projects/core-amqp.tgz'
   '@rush-temp/core-arm': 'file:projects/core-arm.tgz'
@@ -439,6 +440,134 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tsog/HTdM88/WyR0Jz7XWTI0ghbJkt9soFXnQJrINDyaTGzbCoJjRttaW/IY5eAp4eqDyfg++jq6o+byEDOkIQ==
+  /@opencensus/core/0.0.16:
+    dependencies:
+      continuation-local-storage: 3.2.1
+      log-driver: 1.2.7
+      semver: 6.3.0
+      shimmer: 1.2.1
+      uuid: 3.3.2
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-SZv5VpdLAzjLZAXwycj0XnvOWiVLu4HYanEZxXZNpvtXA6tQDlMP8Qssrd7Lz7+mWxAeRNaHiCf9Vy+A15R8tA==
+  /@opencensus/instrumentation-all/0.0.16:
+    dependencies:
+      '@opencensus/instrumentation-grpc': 0.0.16
+      '@opencensus/instrumentation-http': 0.0.16
+      '@opencensus/instrumentation-http2': 0.0.16
+      '@opencensus/instrumentation-https': 0.0.16
+      '@opencensus/instrumentation-ioredis': 0.0.16
+      '@opencensus/instrumentation-mongodb': 0.0.16
+      '@opencensus/instrumentation-redis': 0.0.16
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-qyroOe8twOSowPLgYTYRS9vSuuvHAVKdxPxcO3uXfJ16LEezfaE9mk1b2Yr109qv1wH/sZNeWzQzCshPFN63nw==
+  /@opencensus/instrumentation-grpc/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      '@opencensus/propagation-binaryformat': 0.0.16
+      grpc: 1.21.1
+      lodash: 4.17.15
+      object-sizeof: 1.4.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-GeAAgjouDXNFEb5JVZ/rMNbgKPv8ABSSKy8VoQ2OknXMsvAVK8knTcoMJz3Yrwv4tds6YWXZkQNonsVht4rrOw==
+  /@opencensus/instrumentation-http/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      semver: 6.3.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-VVC/d7lMMaTyQ5j1/cBrnDJnRMM18BABMxoeHDKAKmu8BaPplShXcahYt5cc3X1MSd2fkym5BoMbpAC4uggvtg==
+  /@opencensus/instrumentation-http2/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      '@opencensus/instrumentation-http': 0.0.16
+      semver: 6.3.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-W87o0kXsZhReSx0H3KIwD+mu+05SuCCCaUm/ZV0etihB9RpYhFsvv9+NgU55TsQdfVeWN/YiE88YRocU/XpVfA==
+  /@opencensus/instrumentation-https/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      '@opencensus/instrumentation-http': 0.0.16
+      semver: 6.3.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-opGoZ7M/pxOdDZ1Wt2rH3F92FcR5KeTwJDmpMaeKrzxfHJuGm6VBhSml11sQcY1T4C1J0dNYj5sRLhXSvOKCRg==
+  /@opencensus/instrumentation-ioredis/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      semver: 6.3.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-XNqzeHY21zL2AZ1HU1ZhtlfQxbo9FX24Z6ZAr8YF8JM1rBn3guwn05yeyhaIQYZE0hBiMHrWWr9dpSFdoPUH7Q==
+  /@opencensus/instrumentation-mongodb/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-/z+5hk2qC9q+0vwIRwAJTIjo4Lf0vQFIz8sppEnXOt+NrrUVidYsHXueL3PTGCMgW4siMsxHzlrp/vGarzrqfg==
+  /@opencensus/instrumentation-redis/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      semver: 6.3.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-biJ7SL0jTTlxRCB/0AAZKOaNrRbnvoEOAEyC8tZYarrCoGa79q99y3N3TELE5SZGvkuQ+7dGiMd6VhVfo1Sj3A==
+  /@opencensus/nodejs-base/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      extend: 3.0.2
+      require-in-the-middle: 4.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-qM0D9VT6B6aL5cRwrUAVNqx9Rt7Sn5Tzw6oncWcpEKNxQ+nuaEDJre6Ey/UoorAH4VGurM1V74Deq+MV0xgnJw==
+  /@opencensus/nodejs/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+      '@opencensus/instrumentation-all': 0.0.16
+      '@opencensus/nodejs-base': 0.0.16
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-f+aNXnoby4gKOWygsQxrNHEtput/eqRVHUgpIzt/uVm3PMAWr2ekGpYSFHrc2dTfYxYagmTEwc3U4AkpzRrPIg==
+  /@opencensus/propagation-binaryformat/0.0.16:
+    dependencies:
+      '@opencensus/core': 0.0.16
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-pcb8WoEzdCf8zNt4Kd0rG03Frhwwx+SdjgjD3YfT0lElijS7O7NcqJQZySGmVhRuUd6g7DEwNwAjlGgHWHd34w==
   /@sinonjs/commons/1.4.0:
     dependencies:
       type-detect: 4.0.8
@@ -1360,6 +1489,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=
+  /ascli/1.0.1:
+    dependencies:
+      colour: 0.7.1
+      optjs: 3.2.2
+    dev: false
+    resolution:
+      integrity: sha1-vPpZdKYvGOgcq660lzKrSoj5Brw=
   /asn1.js/4.10.1:
     dependencies:
       bn.js: 4.11.8
@@ -1440,6 +1576,15 @@ packages:
     dev: false
     resolution:
       integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
+  /async-listener/0.6.10:
+    dependencies:
+      semver: 5.7.0
+      shimmer: 1.2.1
+    dev: false
+    engines:
+      node: <=0.11.8 || >0.11.10
+    resolution:
+      integrity: sha512-gpuo6xOyF4D5DE5WvyqZdPA3NGhiT6Qf07l7DCB0wwDEsLvDIbCr6j9S5aj5Ch96dLace5tXVzWBZkxU/c5ohw==
   /async-lock/1.2.2:
     dev: false
     resolution:
@@ -2276,6 +2421,14 @@ packages:
     dev: false
     resolution:
       integrity: sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
+  /bytebuffer/5.0.1:
+    dependencies:
+      long: 3.2.0
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha1-WC7qSxqHO20CCkjVjfhfC7ps/d0=
   /bytes/3.1.0:
     dev: false
     engines:
@@ -2662,6 +2815,12 @@ packages:
       node: '>=0.1.90'
     resolution:
       integrity: sha512-mmGt/1pZqYRjMxB1axhTo16/snVZ5krrKkcmMeVKxzECMMXoCgnvTPp10QgHfcbQZw8Dq2jMNG6je4JlWU0gWg==
+  /colour/0.7.1:
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha1-nLFpkX7F0SwHNtPoaFdG3xyt93g=
   /combined-stream/1.0.8:
     dependencies:
       delayed-stream: 1.0.0
@@ -2752,6 +2911,13 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==
+  /continuation-local-storage/3.2.1:
+    dependencies:
+      async-listener: 0.6.10
+      emitter-listener: 1.1.2
+    dev: false
+    resolution:
+      integrity: sha512-jx44cconVqkCEEyLSKWwkvUXwO561jXMa3LPjTPsm5QR22PA0/mhe33FT4Xb5y74JDvt/Cq+5lm8S8rskLv9ZA==
   /convert-source-map/1.6.0:
     dependencies:
       safe-buffer: 5.1.2
@@ -3260,6 +3426,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-eFOJTMyCYb7xtE/caJ6JJu+bhi67WCYNbkGSknu20pmM8Ke/bqOfdnZWxyoGN26JgfxTbXrsCkEw4KheCT/KGg==
+  /emitter-listener/1.1.2:
+    dependencies:
+      shimmer: 1.2.1
+    dev: false
+    resolution:
+      integrity: sha512-Bt1sBAGFHY9DKY+4/2cV6izcKJUf5T7/gkdmkxzX/qv9CcGH8xSwVRW5mtX03SWJtRTWSOpzCuWN9rBFYZepZQ==
   /emoji-regex/7.0.3:
     dev: false
     resolution:
@@ -4344,6 +4516,20 @@ packages:
       node: '>=4.x'
     resolution:
       integrity: sha512-qBr4OuELkhPenW6goKVXiv47US3clb3/IbuWF9KNKEijAy9oeHxU9IgzjvJhHkUzhaj7rOUD7+YGWqUjLp5oSA==
+  /grpc/1.21.1:
+    bundledDependencies:
+      - node-pre-gyp
+    dependencies:
+      lodash.camelcase: 4.3.0
+      lodash.clone: 4.5.0
+      nan: 2.14.0
+      protobufjs: 5.0.3
+    dev: false
+    engines:
+      node: '>=4'
+    requiresBuild: true
+    resolution:
+      integrity: sha512-PFsZQazf62nP05a0xm23mlImMuw5oVlqF/0zakmsdqJgvbABe+d6VThY2PfhqJmWEL/FhQ6QNYsxS5EAM6++7g==
   /gulp-cli/2.2.0:
     dependencies:
       ansi-colors: 1.1.0
@@ -5711,6 +5897,14 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A==
+  /lodash.camelcase/4.3.0:
+    dev: false
+    resolution:
+      integrity: sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
+  /lodash.clone/4.5.0:
+    dev: false
+    resolution:
+      integrity: sha1-GVhwRQ9aExkkeN9Lw9I9LeoZB7Y=
   /lodash.flattendeep/4.4.0:
     dev: false
     resolution:
@@ -5735,6 +5929,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  /log-driver/1.2.7:
+    dev: false
+    engines:
+      node: '>=0.8.6'
+    resolution:
+      integrity: sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg==
   /log-symbols/2.2.0:
     dependencies:
       chalk: 2.4.2
@@ -5777,6 +5977,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-BYxIEXiVq5lGIXeVHnsFzqa1TxN5acnKnPCdlZSpzm8viNEOhiigupA4vTQ9HEFQ6nLTQ9wQOgBknJgzUYQ9Aw==
+  /long/3.2.0:
+    dev: false
+    engines:
+      node: '>=0.6'
+    resolution:
+      integrity: sha1-2CG3E4yhy1gcFymQ7xTbIAtcR0s=
   /long/4.0.0:
     dev: false
     resolution:
@@ -6239,6 +6445,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-2IUgKDhc3J7Uug+FxMXuqIyYzH7gJjXECKe/w43IGgQHTSj3InJi+yAA7T24L9bQMRKiUEHxEX37G5JpVUGLcQ==
+  /module-details-from-path/1.0.3:
+    dev: false
+    resolution:
+      integrity: sha1-EUyUlnPiqKNenTV4hSeqN7Z52is=
   /moment/2.24.0:
     dev: false
     resolution:
@@ -6302,7 +6512,6 @@ packages:
       integrity: sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=
   /nan/2.14.0:
     dev: false
-    optional: true
     resolution:
       integrity: sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
   /nanoassert/1.1.0:
@@ -6566,6 +6775,12 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
+  /object-sizeof/1.4.0:
+    dependencies:
+      buffer: 5.2.1
+    dev: false
+    resolution:
+      integrity: sha512-ehpLH3Jjs3tGVzhkPYC+z0Cczpx5FZnCaCmWS4GkxZnGgGB1jCWSju8WTRdCGmCRNoXidmBurDyzaDiZVlOrVw==
   /object-visit/1.0.1:
     dependencies:
       isobject: 3.0.1
@@ -6683,6 +6898,10 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha1-NkxeQJ0/TWMB1sC0wFu6UBgK62Q=
+  /optjs/3.2.2:
+    dev: false
+    resolution:
+      integrity: sha1-aabOicRCpEQDFBrS+bNwvVu29O4=
   /ordered-read-streams/1.0.1:
     dependencies:
       readable-stream: 2.3.6
@@ -7153,6 +7372,18 @@ packages:
       '0': node >= 0.8.1
     resolution:
       integrity: sha1-AMLa7t2iDofjeCs0Stuhzd1q1wk=
+  /protobufjs/5.0.3:
+    dependencies:
+      ascli: 1.0.1
+      bytebuffer: 5.0.1
+      glob: 7.1.4
+      yargs: 3.32.0
+    dev: false
+    engines:
+      node: '>=0.8'
+    hasBin: true
+    resolution:
+      integrity: sha512-55Kcx1MhPZX0zTbVosMQEO5R6/rikNXd9b6RQK4KSPcrSIIwoXTtebIczUrXlwaSrbz4x8XUVThGPob1n8I4QA==
   /proxy-addr/2.0.5:
     dependencies:
       forwarded: 0.1.2
@@ -7615,6 +7846,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
+  /require-in-the-middle/4.0.0:
+    dependencies:
+      debug: 4.1.1
+      module-details-from-path: 1.0.3
+      resolve: 1.11.1
+    dev: false
+    resolution:
+      integrity: sha512-GX12iFhCUzzNuIqvei0dTLUbBEjZ420KTY/MmDxe2GQKPDGyH/wgfGMWFABpnM/M6sLwC3IaSg8A95U6gIb+HQ==
   /require-main-filename/1.0.1:
     dev: false
     resolution:
@@ -8086,6 +8325,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-fc0BKlAWiLpwZljmOvAOTE/gXawtCoNrP5oaY7KIaQbbyHeQVg01pSEuEGvGh3HEdBU4baCD7wQBwADmM/7f7A==
+  /shimmer/1.2.1:
+    dev: false
+    resolution:
+      integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==
   /shx/0.3.2:
     dependencies:
       es6-object-assign: 1.1.0
@@ -9382,6 +9625,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==
+  /window-size/0.1.4:
+    dev: false
+    engines:
+      node: '>= 0.10.0'
+    hasBin: true
+    resolution:
+      integrity: sha1-+OGqHuWlPsW/FR/6CXQqatdpeHY=
   /wordwrap/0.0.3:
     dev: false
     engines:
@@ -9583,6 +9833,18 @@ packages:
     dev: false
     resolution:
       integrity: sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==
+  /yargs/3.32.0:
+    dependencies:
+      camelcase: 2.1.1
+      cliui: 3.2.0
+      decamelize: 1.2.0
+      os-locale: 1.4.0
+      string-width: 1.0.2
+      window-size: 0.1.4
+      y18n: 3.2.1
+    dev: false
+    resolution:
+      integrity: sha1-AwiOnr+edWtpdRYR0qXvWRSCyZU=
   /yargs/7.1.0:
     dependencies:
       camelcase: 3.0.0
@@ -9693,7 +9955,7 @@ packages:
     dev: false
     name: '@rush-temp/abort-controller'
     resolution:
-      integrity: sha512-bIzABrjau8S+xASThmmJZiydBex1wA2/bYfHAjrSi0vKm5+se5/L3t/HGtDTWhjlDDnyH8qoM38FqsvtuW4tXA==
+      integrity: sha512-MMUffH4NZW/NawCA13C0bdKqjytoja1BQSwuA7bQHzMmINYCA+3lE9scchzm8CV5N5RIdtPPABCTkPAdI/2w6A==
       tarball: 'file:projects/abort-controller.tgz'
     version: 0.0.0
   'file:projects/core-amqp.tgz':
@@ -9764,7 +10026,7 @@ packages:
     dev: false
     name: '@rush-temp/core-amqp'
     resolution:
-      integrity: sha512-A8JuddC5kyx95z09g4QIuSJq0SHcVCt07KNUyKUlzNoc0Kz8bzu6MTA6C/wCdjy8NGX1Qips2DJp3ZiZ6UGT6Q==
+      integrity: sha512-IMcjrA174Vhx0YMmlVOokpIqGdPX+18gFxJeCsGpMp9S4mqd0c/TsXU+3fjvdJGHaxJzvqoyrzrdjxMaoAASYw==
       tarball: 'file:projects/core-amqp.tgz'
     version: 0.0.0
   'file:projects/core-arm.tgz':
@@ -9800,7 +10062,7 @@ packages:
     dev: false
     name: '@rush-temp/core-arm'
     resolution:
-      integrity: sha512-85DqTR+GlQ8LidDuiKezmpzpw8Enm4NL/v2iPdsDpVf03a4rCd/BOzgngF+OrhOtjRwqEcKh5NebxAEMZi8qdQ==
+      integrity: sha512-pyEiD37YlrRGFw/QdPkmVy1yOIEbpAp1shPzktFxYfuN/BWicVa+I62AF14J3DdqXkG4wsRaaUNIfrTCvMJNVQ==
       tarball: 'file:projects/core-arm.tgz'
     version: 0.0.0
   'file:projects/core-asynciterator-polyfill.tgz':
@@ -9819,7 +10081,7 @@ packages:
     dev: false
     name: '@rush-temp/core-asynciterator-polyfill'
     resolution:
-      integrity: sha512-nPjyOqFRc8MuqAhYMaynRgS6dTLJGOiOAcRNmmr14QEFyvLNGTEI8OSi//3EKZxJAJpQyuLaLpVWMxYmWQdT7g==
+      integrity: sha512-eM85h9SCt/WXjcDWnOd1RZAKQWwPRSpsOgNeNHm/RZ84rEDmAp/8Lv1t1vaJLLqn6bExzexX/a3MjS57kuNY/g==
       tarball: 'file:projects/core-asynciterator-polyfill.tgz'
     version: 0.0.0
   'file:projects/core-auth.tgz':
@@ -9859,7 +10121,7 @@ packages:
     dev: false
     name: '@rush-temp/core-auth'
     resolution:
-      integrity: sha512-c8ns6yVVgmqFkFtmh7+HXfafhuvbq8IFOv3tVvCe6/vDfZs5vbFh3cp2Vd0Wq+VetjqkfOYGost5vnfzDBbppw==
+      integrity: sha512-BzCXSUB2kZHpKe4LcJmw1ttav09XKk0gCebGj3pric2r8D4dKZIpzS5KRJ+t+X8TcyupVuBv2kx/U2ZeTTX6QA==
       tarball: 'file:projects/core-auth.tgz'
     version: 0.0.0
   'file:projects/core-http.tgz':
@@ -9941,7 +10203,7 @@ packages:
     dev: false
     name: '@rush-temp/core-http'
     resolution:
-      integrity: sha512-l7OUldrjQDsWybnBr6meccYurXUTHFrK2UQtXtE1oNApeX2hhwUaPzw0Fc/FjKwZBiCAfxmF8Fl61+tKf62cQQ==
+      integrity: sha512-7IhE+RIsCZy2i1mRHlNnCcs2Lb/4MD3yOOQNTKDvSHsUqapfdjKB0vL/5lNfFB1lnz4Ty7Zwnx4S8ejzisgQFQ==
       tarball: 'file:projects/core-http.tgz'
     version: 0.0.0
   'file:projects/core-paging.tgz':
@@ -9961,7 +10223,7 @@ packages:
     dev: false
     name: '@rush-temp/core-paging'
     resolution:
-      integrity: sha512-rk1X9nvLFFHRZiy9AuGgOZTAj6kXGAJdNZfp+pWjocRQC83biSUI7obzCsPToNe08GUqNJ/bbJ4mDvyi4GoF1Q==
+      integrity: sha512-EnQl2fTIIG6a5I/I3EzV+4vYTEJcb4TBBeW/olyfoCWioVWC9Mmq5u4S83XXAgY3m98/ctbNHzEcEuCdgSdVrA==
       tarball: 'file:projects/core-paging.tgz'
     version: 0.0.0
   'file:projects/core-tracing.tgz':
@@ -10000,7 +10262,7 @@ packages:
     dev: false
     name: '@rush-temp/core-tracing'
     resolution:
-      integrity: sha512-DchPjpaHYVA6lrJzpRuTMeFlYGgLvQov8nWYuBs5w5ZZciYHlEGs7g7QbO6BqJQRQlD+ztYm/DQIWkDVX1HZuA==
+      integrity: sha512-bn/Ll8t/8EkxyT5d7wI1brmQduZ0wwAYOc9wmiXsvACidExUHHbcFUYDdzIEABYDxE1KnUGTeme0ExBk/6zJIQ==
       tarball: 'file:projects/core-tracing.tgz'
     version: 0.0.0
   'file:projects/cosmos.tgz':
@@ -10042,7 +10304,7 @@ packages:
     dev: false
     name: '@rush-temp/cosmos'
     resolution:
-      integrity: sha512-c7CGi8xrJ/rvrgM1dV3Qc+q2rHBcNunfWSHeIPZ9gWlpzryon5i2KFqdruOSj0Fpq9nHPMlMuABKWRxMJzUv0Q==
+      integrity: sha512-5OtuHMLHmJ9wohJDESFRqKwMm3IMXzj6ffj2BkZZqroUioGo4xLqSOAVrnaqPaiBzlQWp96viBp8mhxgc+2prA==
       tarball: 'file:projects/cosmos.tgz'
     version: 0.0.0
   'file:projects/event-hubs.tgz':
@@ -10118,7 +10380,7 @@ packages:
     dev: false
     name: '@rush-temp/event-hubs'
     resolution:
-      integrity: sha512-5Qj1ibYTBCinjGio6G84nT3WpzqbBphZGRH35pWVf7mKJdwqFBNkfSi4e0NX7LnulG1jxFQ+kGXk8kSE75KJHQ==
+      integrity: sha512-5bF+EvgsyN/dhQIPgU/C24oeLdUSa+FSbELjGfSmWkmhLQbgBM8JQNImtDgor5n81QpM1pWpFPIpu5M8cVmHzg==
       tarball: 'file:projects/event-hubs.tgz'
     version: 0.0.0
   'file:projects/event-processor-host.tgz':
@@ -10176,7 +10438,7 @@ packages:
     dev: false
     name: '@rush-temp/event-processor-host'
     resolution:
-      integrity: sha512-TTBcKZgB5+blsq9xSlQOh5pXenlBVGmCFu3FqRzbmxMfXWNFCnc1m62E/E7U8WTSIAXpGM8GVuEdN8a9pi/OyA==
+      integrity: sha512-NA3u7hYUX4M4rPCK+aTFtGaZfbMDWvsxHdV0No6sppjjLiHEKDL2yBdBwhuhKsy4/Ty/VIpfJQQjfUoYPOn/nw==
       tarball: 'file:projects/event-processor-host.tgz'
     version: 0.0.0
   'file:projects/identity.tgz':
@@ -10228,7 +10490,7 @@ packages:
     dev: false
     name: '@rush-temp/identity'
     resolution:
-      integrity: sha512-G25flY7lWUBTWAEi0x7iwThTVeuRnSge58tKZQ9RYyrqARi5XxFXcmY5gCd8TpoOZT9snc0yE4huaTA7YDsvMA==
+      integrity: sha512-Ubsv7XiS4y1uj1PpXBvnOvQTJZW/UPdwEqGfQIWyKz7z0msyM/qrsTPe9qxVj4rDtbP33tCx9SOmqXH5qOWnTg==
       tarball: 'file:projects/identity.tgz'
     version: 0.0.0
   'file:projects/keyvault-certificates.tgz':
@@ -10257,7 +10519,7 @@ packages:
     dev: false
     name: '@rush-temp/keyvault-certificates'
     resolution:
-      integrity: sha512-998HnDTu7SREG+3+AjWHcXtSoL/+tcgqsIg61meKMRwkqPCX7Qr9Zn9Axnrb9dNQAh63qTuWtKp1pJD2udFHCw==
+      integrity: sha512-chpyZ7ntkMyiVzN6BTFCdw/mzSpZj8O8Gi4JznOkO7bBOQzgBLmVIQ/pwJqUoJg8YUnfqNZMV/xqJD6Irkjl1w==
       tarball: 'file:projects/keyvault-certificates.tgz'
     version: 0.0.0
   'file:projects/keyvault-keys.tgz':
@@ -10265,6 +10527,7 @@ packages:
       '@azure/abort-controller': 1.0.0-preview.1
       '@azure/core-paging': 1.0.0-preview.1
       '@microsoft/api-extractor': 7.3.4
+      '@opencensus/nodejs': 0.0.16
       '@trust/keyto': 0.3.7
       '@types/chai': 4.1.7
       '@types/dotenv': 6.1.1
@@ -10327,7 +10590,7 @@ packages:
     dev: false
     name: '@rush-temp/keyvault-keys'
     resolution:
-      integrity: sha512-6KdME0JitnkaljwGxcLdk/uYv1+mndfahRShJhfjh4BIASk2az7u/lyrCr1k1pcdKRzHPuPFzKk7zEpY531pAg==
+      integrity: sha512-Mp2uBZtX1m/tegY74lsz9XN+ChGP5cIhcKPZ1//dsbrUJ718fqVeXA/bUjaQ80kyai9HPBR6zRm0lBg9/wxKWA==
       tarball: 'file:projects/keyvault-keys.tgz'
     version: 0.0.0
   'file:projects/keyvault-secrets.tgz':
@@ -10396,7 +10659,7 @@ packages:
     dev: false
     name: '@rush-temp/keyvault-secrets'
     resolution:
-      integrity: sha512-6ZnD+cGK0MWZyuTeS1b51pZxoP41kOHkPkeFRacV9RSBFB91lq8C59V/W/Ag+nzuxvwdfWNg1qtjb2iUWTm26A==
+      integrity: sha512-a/Il5P+9dNOUYtFC0EB5PZIhy5LouW+8oqc+uBvwlIKAA/NzUVTy5ZjkMskqiH5aMleJeV4ZMYOSBigU8O8e7Q==
       tarball: 'file:projects/keyvault-secrets.tgz'
     version: 0.0.0
   'file:projects/service-bus.tgz':
@@ -10474,7 +10737,7 @@ packages:
     dev: false
     name: '@rush-temp/service-bus'
     resolution:
-      integrity: sha512-1PNmZznPJeDK1iAAPr4JEDAH91Oubo+L3U75qrtpcWxQuL5B+QPBXkQ56RizZozq93ddihokdumRPMdv2TTVtw==
+      integrity: sha512-YZz3mASz3qrM577g17GK1eoOiOyH8DiSGxfkIw28W+qGFSBhPNXKs1qdOwDySMs9iypb3z8UjPMeEiBJYFfj/Q==
       tarball: 'file:projects/service-bus.tgz'
     version: 0.0.0
   'file:projects/storage-blob.tgz':
@@ -10545,7 +10808,7 @@ packages:
     dev: false
     name: '@rush-temp/storage-blob'
     resolution:
-      integrity: sha512-l79yBi7Dw/RjncYIAEZ/vJbTxUA6Ecdm1MLyMEuxoqoRH9LxhYUoJsAPls6gCOVCHwUSalq5FK8vFh00bUcViw==
+      integrity: sha512-/pzOlT+BOxng1QpYdbv3xj6EbqP2+biLw7Lsj8MuQ/JlkecQ/vq7uFRuu67Pv7RMA66kzwBu4PRvpkN3CyCsWg==
       tarball: 'file:projects/storage-blob.tgz'
     version: 0.0.0
   'file:projects/storage-file.tgz':
@@ -10616,7 +10879,7 @@ packages:
     dev: false
     name: '@rush-temp/storage-file'
     resolution:
-      integrity: sha512-bISLef1l1o/d/2PKBzE6zYrL2QU5qKJ8qs+8+ulvPxh6F5AOnZvUYxDXckzmQdC0UP9MGyln+0FOIsjGM/2T7g==
+      integrity: sha512-AcWoeC5WyCxKB+KVvceLsoq/zSf5HFzVdXpVvX+Mc/+uaP6XItcvGGsLQfwUojuQ5P7y08AMNMzFMh++vCn7qA==
       tarball: 'file:projects/storage-file.tgz'
     version: 0.0.0
   'file:projects/storage-queue.tgz':
@@ -10686,7 +10949,7 @@ packages:
     dev: false
     name: '@rush-temp/storage-queue'
     resolution:
-      integrity: sha512-Rrp0tf7KUYqqIK4T17vt2s2r9+ET8Dklfw9Y3TGySP26mw5FbNPOuwFAk2Qk8BUEA8gUsh9Mn18rwvWXqY6Bkg==
+      integrity: sha512-2O9eUkSpX6m28VxTLOykmO3qCo7wybjtfDi6ITx3AhyuRghzv7JwMQNoQKKZlipoD0C5xRzFt4kx51HSA1haPQ==
       tarball: 'file:projects/storage-queue.tgz'
     version: 0.0.0
   'file:projects/template.tgz':
@@ -10737,7 +11000,7 @@ packages:
     dev: false
     name: '@rush-temp/template'
     resolution:
-      integrity: sha512-g0NCs2NAbYK5hxfz3D+L2J52tCX5OVIgkRK5/AfnJuqivkifxHSMpAs6lSY3o86u0iLTrQjvj5w55N5nxjwk0A==
+      integrity: sha512-MxtFJnVO6Nw4g+5rIx/QWGh/+i5iimaZLDDEisDKv4PY/K8OfoV4Z/dZikDd22rhLUIoT4+yRizXbKtLM7zLxg==
       tarball: 'file:projects/template.tgz'
     version: 0.0.0
   'file:projects/testhub.tgz':
@@ -10762,7 +11025,7 @@ packages:
     dev: false
     name: '@rush-temp/testhub'
     resolution:
-      integrity: sha512-EdVKjfhxkTUOQFkqCAlmgk2aV89QrTsXOeGPstlyewUaLy6WJdQaP/aAdpFpdr2DBGT7Bj9JatAQ/oqOdoK6ZA==
+      integrity: sha512-VxrbDXfuJ6Nz4rm0DHlJ+0sMk4RMKRflIyu7WxXLZGBpri9KLivFyNA0TWfZBifpdy3T1kVXyLOccskpzczDvA==
       tarball: 'file:projects/testhub.tgz'
     version: 0.0.0
 registry: ''
@@ -10778,6 +11041,7 @@ specifiers:
   '@azure/ms-rest-js': ^2.0.0
   '@azure/ms-rest-nodeauth': ^0.9.2
   '@microsoft/api-extractor': ^7.1.5
+  '@opencensus/nodejs': 0.0.16
   '@rush-temp/abort-controller': 'file:./projects/abort-controller.tgz'
   '@rush-temp/core-amqp': 'file:./projects/core-amqp.tgz'
   '@rush-temp/core-arm': 'file:./projects/core-arm.tgz'
