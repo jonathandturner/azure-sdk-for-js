@@ -98,6 +98,7 @@ export class AzureCliCredential implements TokenCredential {
           } else {
             responseData = obj.stdout;
             const response: { accessToken: string; expiresOn: string } = JSON.parse(responseData);
+            console.log("response: ", response);
             resolve({
               token: response.accessToken,
               expiresOnTimestamp: new Date(response.expiresOn).getTime()

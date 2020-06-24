@@ -7936,7 +7936,7 @@ packages:
     dev: false
     name: '@rush-temp/core-http'
     resolution:
-      integrity: sha512-HD7wTCJGKbLGCja6W3H/FS1Av/nGt35Bd8CRE7zXPwtsHJV0WJeYzc9VCNcBAfoTMV7aA4QC60KJdQk7ktRKrQ==
+      integrity: sha512-Aavb1OtBbj8OIGbhBBJjPIrb5jnfDrUUDpvd+Ojj2rOlgnNaFbaCuQI6ydOK5GTmn1WNmoEf9lYyFRSrNJNHDw==
       tarball: 'file:projects/core-http.tgz'
     version: 0.0.0
   'file:projects/core-https.tgz':
@@ -8274,7 +8274,7 @@ packages:
     dev: false
     name: '@rush-temp/event-hubs'
     resolution:
-      integrity: sha512-xbTUoiBl0HEj7vWxBV3xPQQqa22nagQobiVAKQUYVrtI/hreADQtCZYsyivcXYVooJaCOXnnLofTbFIYQAIMlA==
+      integrity: sha512-QI2JHGXrGYaynRz7GFX0V0tRSZgeJSgoP6tNtTwBXO+dY5bdo4eyKuuf3HDWiMPADgyZH7a+xvLsJJlQb1CE3w==
       tarball: 'file:projects/event-hubs.tgz'
     version: 0.0.0
   'file:projects/event-processor-host.tgz':
@@ -8417,6 +8417,7 @@ packages:
       '@typescript-eslint/eslint-plugin': 2.34.0_4d7b57a2de70d5f860ec42d3f1ecdb5d
       '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.3
       assert: 1.5.0
+      axios: 0.19.2
       cross-env: 7.0.2
       eslint: 6.8.0
       events: 3.1.0
@@ -8451,7 +8452,7 @@ packages:
     dev: false
     name: '@rush-temp/identity'
     resolution:
-      integrity: sha512-vMkQCKO232rWB/JHuRAod/YewamoyL0irFm6NyWlvzC3zDhxMbkTeqyeGLjjTSzpxdy/rmI4irV76qxF4uHp/A==
+      integrity: sha512-TCm/NdoYO/CWSlZ7+QSqE4Pqobh4jQ4WGrwpLtVKLNwBM87WEzzGacfC+bEueEw/0A/9ob2B1sXGN6WtCKPaDA==
       tarball: 'file:projects/identity.tgz'
     version: 0.0.0
   'file:projects/keyvault-certificates.tgz':
@@ -8839,7 +8840,7 @@ packages:
     dev: false
     name: '@rush-temp/service-bus'
     resolution:
-      integrity: sha512-bXMcdF+Bu/7/oHstS0Ppx0tAby8qfZmemqeboHF66xc23mSRDZ6OQC5zyN6FQSzLeTKK1ItWxsl7iWTukpH8XA==
+      integrity: sha512-W48NAAVhOpKsh4KcHtdPXs4dtS7NBjc2XmwBxHGObQU1dsbQ6ld7z4u3YAwd2Eb95LMbkcDa93bh7lw2LfpLEg==
       tarball: 'file:projects/service-bus.tgz'
     version: 0.0.0
   'file:projects/storage-blob.tgz':
