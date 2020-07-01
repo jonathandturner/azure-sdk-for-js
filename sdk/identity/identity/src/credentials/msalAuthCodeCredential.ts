@@ -9,6 +9,7 @@ const { promises: fs } = require("fs");
 
 import express from "express";
 import msal from "azure-msal-node";
+import open from "open";
 
 import myLocalCache from "./data/cache.json";
 //import {} from "fs";
@@ -69,88 +70,51 @@ export class MsalAuthCodeCredential implements TokenCredential {
    * @param options The options used to configure any requests this
    *                TokenCredential implementation might make.
    */
-  async getToken(
+  getToken(
     scopes: string | string[],
     options?: GetTokenOptions
   ): Promise<AccessToken | null> {
     let scopeArray = typeof scopes === "object" ? scopes : [scopes];
-
-    // let scope = typeof scopes === "string" ? scopes : scopes[0];
-    // const resource = scope.replace(/\/.default$/, "");
-    
-    // // Check to make sure the scope we get back is a valid scope
-    // if (!scopeString.match(/^[0-9a-zA-Z-.:/]+$/)) {
-    //   throw new Error("Invalid scope was specified by the user or calling client")
-    // }
-
-    // if (scopeArray.indexOf("offline_access") < 0) {
-    //   scopeArray.push("offline_access");
-    // }
-
-    console.log(scopeArray);
 
     // Create Express App and Routes
     const app = express();
     var complete = false;
     var authResponse: any = undefined;
 
-    // app.get('/', async(req, res) => {
-    //   const authCodeUrlParameters = {
-    //     scopes: scopeArray,
-    //     redirectUri: "http://localhost",
-    //   };
-
-    //   // get url to sign user in and consent to scopes needed for application
-    //   try {
-    //     let response = await this.pca.getAuthCodeUrl(authCodeUrlParameters);    
-    //     console.log(response);
-    //     return res.redirect(response);
-    //   } catch (error) {
-    //     console.log(JSON.stringify(error));
-    //   }
-    // });
     const authCodeUrlParameters = {
       scopes: scopeArray,
       redirectUri: "http://localhost",
     };
-    let response = await this.pca.getAuthCodeUrl(authCodeUrlParameters);    
-    console.log(response);
 
-    app.get('/', (req, res) => {
-      console.log("Inside the redirect");
-      const tokenRequest: msal.AuthorizationCodeRequest = {
-        code: req.query.code as string,
-        redirectUri: "http://localhost",
-        scopes: scopeArray,
-      };
-
-      console.log("req: ", req);
-      console.log("res: ", res);
-
-      this.pca.acquireTokenByCode(tokenRequest).then((response: any) => {
-        console.log("\nResponse: \n:", response);
-        res.send(200);
-        complete = true;
-        authResponse = response;
-        return this.msalCacheManager.writeToPersistence();
-      }).catch((error: any) => {
-        console.log(error);
-        res.status(500).send(error);
+    let self = this;
+    
+    return new Promise(function(resolve, reject) {
+      let p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response) => {
+        open(response);
+        console.log(response);
       });
+
+      app.get('/', (req, res) => {
+        console.log("Inside the redirect");
+        const tokenRequest: msal.AuthorizationCodeRequest = {
+          code: req.query.code as string,
+          redirectUri: "http://localhost",
+          scopes: scopeArray,
+        };
+
+        self.pca.acquireTokenByCode(tokenRequest).then((authResponse: any) => {
+          res.sendStatus(200);
+          listen.close();
+          resolve({expiresOnTimestamp: authResponse.expiresOnTimestamp, token: authResponse.accessToken});
+        }).catch((error: any) => {
+          console.log(error);
+          res.status(500).send(error);
+        });
+      });
+
+      //await this.msalCacheManager.readFromPersistence();
+      /*.then(self.msalCacheManager.writeToPersistence)*/
+      let listen = app.listen(SERVER_PORT, () => console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`));
     });
-
-    //await this.msalCacheManager.readFromPersistence();
-    let listen = app.listen(SERVER_PORT, () => console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`));
-
-    while (complete == false) {
-      //await delay(100);
-    }
-
-    console.log("authResponse:");
-    console.log(authResponse);
-
-    listen.close();
-
-    return {expiresOnTimestamp: authResponse.expiresOnTimestamp, token: authResponse.accessToken};
   }
 }
