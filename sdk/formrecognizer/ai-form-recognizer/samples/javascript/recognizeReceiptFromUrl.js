@@ -20,13 +20,12 @@ async function main() {
     "https://raw.githubusercontent.com/Azure-Samples/cognitive-services-REST-api-samples/master/curl/form-recognizer/contoso-allinone.jpg";
 
   const poller = await client.beginRecognizeReceiptsFromUrl(url, {
-    includeTextDetails: true,
+    includeFieldElements: true,
     onProgress: (state) => {
       console.log(`analyzing status: ${state.status}`);
     }
   });
-  await poller.pollUntilDone();
-  const receipts = poller.getResult();
+  const receipts = await poller.pollUntilDone();
 
   if (!receipts || receipts.length <= 0) {
     throw new Error("Expecting at lease one receipt in analysis result");

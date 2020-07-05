@@ -7,8 +7,7 @@ import {
   isTokenCredential,
   bearerTokenAuthenticationPolicy,
   operationOptionsToRequestOptionsBase,
-  AbortSignalLike,
-  ServiceClientCredentials
+  AbortSignalLike
 } from "@azure/core-http";
 import { TokenCredential } from "@azure/identity";
 import { KeyCredential } from "@azure/core-auth";
@@ -107,10 +106,7 @@ export type BeginRecognizeContentOptions = RecognizeContentOptions & {
 /**
  * The Long-Running-Operation (LRO) poller that allows you to wait until form content is recognized.
  */
-export type ContentPollerLike = PollerLike<
-  PollOperationState<FormPageArray>,
-  FormPageArray
->;
+export type ContentPollerLike = PollerLike<PollOperationState<FormPageArray>, FormPageArray>;
 
 /**
  * Options for retrieving recognized content data
@@ -124,7 +120,7 @@ export type RecognizeFormsOptions = FormRecognizerOperationOptions & {
   /**
    * Specifies whether to include text lines and element references in the result
    */
-  includeTextDetails?: boolean;
+  includeFieldElements?: boolean;
 };
 
 /**
@@ -165,7 +161,7 @@ export type RecognizeReceiptsOptions = FormRecognizerOperationOptions & {
   /**
    * Specifies whether to include text lines and element references in the result
    */
-  includeTextDetails?: boolean;
+  includeFieldElements?: boolean;
 };
 
 /**
@@ -266,18 +262,7 @@ export class FormRecognizerClient {
 
     const pipeline = createPipelineFromOptions(internalPipelineOptions, authPolicy);
 
-    // The contract with the generated client requires a credential, even though it is never used
-    // when a pipeline is provided. Until that contract can be changed, this dummy credential will
-    // throw an error if the client ever attempts to use it.
-    const dummyCredential: ServiceClientCredentials = {
-      signRequest() {
-        throw new Error(
-          "Internal error: Attempted to use credential from service client, but a pipeline was provided."
-        );
-      }
-    };
-
-    this.client = new GeneratedClient(dummyCredential, this.endpointUrl, pipeline);
+    this.client = new GeneratedClient(this.endpointUrl, pipeline);
   }
 
   /**
@@ -298,11 +283,7 @@ export class FormRecognizerClient {
    *   onProgress: (state) => { console.log(`status: ${state.status}`); }
    * });
    *
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
-   *
-   * console.log(response.status);
-   * console.log(response.pages);
+   * const pages = await poller.pollUntilDone();
    * ```
    * @summary Recognizes content/layout information from a given document
    * @param {FormRecognizerRequestBody} form Input document
@@ -347,15 +328,10 @@ export class FormRecognizerClient {
    *   onProgress: (state) => { console.log(`status: ${state.status}`); }
    * });
    *
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
-   *
-   * console.log(response.status);
-   * console.log(response.pages);
+   * const pages = await poller.pollUntilDone();
    * ```
    * @summary Recognizes content/layout information from a url to a form document
-   * @param {string} formUrl Url to an accessible form document
-ng", and "image/tiff";
+   * @param {string} formUrl Url to an accessible form document. Supported document types include PDF, JPEG, PNG, and TIFF.
    * @param {BeginRecognizeContentOptions} [options] Options to start content recognition operation
    */
   public async beginRecognizeContentFromUrl(
@@ -423,9 +399,7 @@ ng", and "image/tiff";
    * const poller = await client.beginRecognizeCustomForms(modelId, readStream, "application/pdf", {
    *   onProgress: (state) => { console.log(`status: ${state.status}`); }
    * });
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
-   * console.log(response.status);
+   * const forms = await poller.pollUntilDone();
    * ```
    * @summary Recognizes form information from a given document using a custom form model.
    * @param {string} modelId Id of the custom form model to use
@@ -480,14 +454,11 @@ ng", and "image/tiff";
    * const poller = await client.beginRecognizeCustomFormsFromUrl(modelId, url, {
    *   onProgress: (state) => { console.log(`status: ${state.status}`); }
    * });
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
-   * console.log(response.status);
+   * const forms = await poller.pollUntilDone();
    * ```
    * @summary Recognizes form information from a url to a form document using a custom form model.
    * @param {string} modelId Id of the custom form model to use
-   * @param {string} formUrl Url to an accessible form document
-   ng", and "image/tiff";
+   * @param {string} formUrl Url to an accessible form document. Supported document types include PDF, JPEG, PNG, and TIFF.
    * @param {BeginRecognizeFormsOptions} [options] Options to start the form recognition operation
    */
   public async beginRecognizeCustomFormsFromUrl(
@@ -575,8 +546,7 @@ ng", and "image/tiff";
    *   onProgress: (state) => { console.log(`status: ${state.status}`); }
    * });
    *
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
+   * const receipts = await poller.pollUntilDone();
    *  if (!receipts || receipts.length <= 0) {
    *    throw new Error("Expecting at lease one receipt in analysis result");
    *  }
@@ -654,11 +624,13 @@ ng", and "image/tiff";
    * const client = new FormRecognizerClient(endpoint, new AzureKeyCredential(apiKey));
    * const poller = await client.beginRecognizeReceiptsFromUrl(
    *   url, {
-   *     includeTextDetails: true,
+   *     includeFieldElements: true,
    *     onProgress: (state) => { console.log(`analyzing status: ${state.status}`); }
    * });
-   * await poller.pollUntilDone();
-   * const response = poller.getResult();
+   * const receipts = await poller.pollUntilDone();
+   *  if (!receipts || receipts.length <= 0) {
+   *    throw new Error("Expecting at lease one receipt in analysis result");
+   *  }
    *
    * const receipt = receipts[0];
    * console.log("First receipt:");
@@ -691,7 +663,7 @@ ng", and "image/tiff";
    * }
    * ```
    * @summary Recognizes receipt information from a given accessible url to input document
-   * @param {string} receiptUrl url to the input receipt document
+   * @param {string} receiptUrl Url to an accesssible receipt document. Supported document types include PDF, JPEG, PNG, and TIFF.
    * @param {BeginRecognizeReceiptsOptions} [options] Options to start receipt recognition operation
    */
   public async beginRecognizeReceiptsFromUrl(
@@ -794,7 +766,10 @@ async function recognizeCustomFormInternal(
   options: RecognizeFormsOptions = {},
   modelId?: string
 ): Promise<AnalyzeWithCustomModelResponseModel> {
-  const { span, updatedOptions: finalOptions } = createSpan("analyzeCustomFormInternal", options);
+  const { span, updatedOptions: finalOptions } = createSpan("analyzeCustomFormInternal", {
+    ...options,
+    includeTextDetails: options.includeFieldElements
+  });
   const requestBody = await toRequestBody(body);
   const requestContentType = contentType ? contentType : await getContentType(requestBody);
 
@@ -832,8 +807,11 @@ async function recognizeReceiptInternal(
   options?: RecognizeReceiptsOptions,
   _modelId?: string
 ): Promise<AnalyzeReceiptAsyncResponseModel> {
-  const realOptions = options || { includeTextDetails: false };
-  const { span, updatedOptions: finalOptions } = createSpan("analyzeReceiptInternal", realOptions);
+  const realOptions = options || { includeFieldElements: false };
+  const { span, updatedOptions: finalOptions } = createSpan("analyzeReceiptInternal", {
+    ...realOptions,
+    includeTextDetails: realOptions.includeFieldElements
+  });
   const requestBody = await toRequestBody(body);
   const requestContentType =
     contentType !== undefined ? contentType : await getContentType(requestBody);

@@ -6,7 +6,7 @@
  * form content and fields, which can be used for manual validation and drawing UI as part of an application.
  */
 
-import { FormRecognizerClient, AzureKeyCredential } from "@azure/ai-form-recognizer";
+import { FormRecognizerClient, AzureKeyCredential, BeginRecognizeCustomFormPollState } from "@azure/ai-form-recognizer";
 import * as fs from "fs";
 
 // Load the .env file if it exists
@@ -28,12 +28,11 @@ export async function main() {
 
   const client = new FormRecognizerClient(endpoint, new AzureKeyCredential(apiKey));
   const poller = await client.beginRecognizeCustomForms(modelId, readStream, "application/pdf", {
-    onProgress: (state) => {
+    onProgress: (state: BeginRecognizeCustomFormPollState) => {
       console.log(`status: ${state.status}`);
     }
   });
-  await poller.pollUntilDone();
-  const forms = poller.getResult();
+  const forms = await poller.pollUntilDone();
 
   console.log("Forms:");
   let i = 0;
@@ -44,8 +43,8 @@ export async function main() {
       // each field is of type FormField
       const field = form.fields[fieldName];
       const boundingBox =
-        field.valueText && field.valueText.boundingBox
-          ? field.valueText.boundingBox.map((p) => `[${p.x},${p.y}]`).join(", ")
+        field.valueData && field.valueData.boundingBox
+          ? field.valueData.boundingBox.map((p) => `[${p.x},${p.y}]`).join(", ")
           : "N/A";
       console.log(
         `    Field ${fieldName} has value '${field.value}' with a confidence score of ${field.confidence} within bounding box ${boundingBox}`
@@ -63,7 +62,7 @@ export async function main() {
             console.log(
               `      Cell[${cell.rowIndex},${cell.columnIndex}] has text ${cell.text} with confidence ${cell.confidence} based on the following words:`
             );
-            for (const element of cell.textContent || []) {
+            for (const element of cell.fieldElements || []) {
               const boundingBox = element.boundingBox
                 ? element.boundingBox.map((p) => `[$.2d{p.x},${p.y}]`).join(", ")
                 : "N/A";

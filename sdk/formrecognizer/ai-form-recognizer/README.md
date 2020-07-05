@@ -93,7 +93,7 @@ or other credential providers provided with the Azure SDK, please install the `@
 npm install @azure/identity
 ```
 
-You will also need to [register a new AAD application][register_aad_app] and grant access to Text Analytics by assigning the `"Cognitive Services User"` role to your service principal (note: other roles such as `"Owner"` will not gra\
+You will also need to [register a new AAD application][register_aad_app] and grant access to Form Recognizer by assigning the `"Cognitive Services User"` role to your service principal (note: other roles such as `"Owner"` will not gra\
 nt the necessary permissions, only `"Cognitive Services User"` will suffice to run the examples and the sample code).
 
 Set the values of the client ID, tenant ID, and client secret of the AAD application as environment variables: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`.
@@ -154,8 +154,7 @@ async function main() {
     onProgress: (state) => { console.log(`status: ${state.status}`); }
   });
 
-  await poller.pollUntilDone();
-  const response = poller.getResult();
+  const receipts = await poller.pollUntilDone();
 
   if (!receipts || receipts.length <= 0) {
     throw new Error("Expecting at lease one receipt in analysis result");
@@ -163,7 +162,8 @@ async function main() {
 
   const receipt = receipts[0];
   console.log("First receipt:");
-  const receiptTypeField = receipt.recognizedForm.fields["MerchantName"];
+  // For supported fields recognized by the service, please refer to https://westus2.dev.cognitive.microsoft.com/docs/services/form-recognizer-api-v2-preview/operations/GetAnalyzeReceiptResult.
+  const receiptTypeField = receipt.recognizedForm.fields["ReceiptType"];
   if (receiptTypeField.valueType === "string") {
     console.log(`  Receipt Type: '${receiptTypeField.value || "<missing>"}', with confidence of ${receiptTypeField.confidence}`);
   }
@@ -192,7 +192,9 @@ async function main() {
   }
 }
 
-main();
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});
 ```
 
 ### Recognize content
@@ -205,22 +207,20 @@ const fs = require("fs");
 
 async function main() {
   const endpoint = "<cognitive services endpoint>";
-  const apiKey = || "<api key>";
+  const apiKey = "<api key>";
   const path = "<path to your receipt document>"; // pdf/jpeg/png/tiff formats
 
   const readStream = fs.createReadStream(path);
 
   const client = new FormRecognizerClient(endpoint, new AzureKeyCredential(apiKey));
   const poller = await client.beginRecognizeContent(readStream);
-  await poller.pollUntilDone();
-  const response = poller.getResult();
+  const pages = await poller.pollUntilDone();
 
-  if (!response) {
-    throw new Error("Expecting valid response!");
+  if (!pages || pages.length === 0) {
+    throw new Error("Expecting non-empty list of pages!");
   }
 
-  console.log(response.status);
-  for (const page of response.pages) {
+  for (const page of pages) {
     console.log(
       `Page ${page.pageNumber}: width ${page.width} and height ${page.height} with unit ${page.unit}`
     );
@@ -234,7 +234,9 @@ async function main() {
   }
 }
 
-main();
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});
 ```
 
 ### Train model
@@ -254,25 +256,30 @@ async function main() {
   const poller = await trainingClient.beginTraining(containerSasUrl, false, {
     onProgress: (state) => { console.log(`training status: ${state.status}`); }
   });
+  const model = await poller.pollUntilDone();
 
-  await poller.pollUntilDone();
-  const response = poller.getResult();
-  console.log(`Model ID: ${response.modelId}`);
-  console.log(`Status: ${response.status}`);
-  console.log(`Created on: ${response.createdOn}`);
-  console.log(`Last modified: ${response.lastModified}`);
+  if (!model) {
+    throw new Error("Expecting valid training result!");
+  }
 
-  if (response.submodels) {
-    for (const submodel of response.submodels) {
+  console.log(`Model ID: ${model.modelId}`);
+  console.log(`Status: ${model.status}`);
+  console.log(`Training started on: ${model.trainingStartedOn}`);
+  console.log(`Training completed on: ${model.trainingCompletedOn}`);
+
+  if (model.submodels) {
+    for (const submodel of model.submodels) {
+      // since the training data is unlabeled, we are unable to return the accuracy of this model
       console.log("We have recognized the following fields");
       for (const key in submodel.fields) {
         const field = submodel.fields[key];
-        console.log(`The model found field '${field.name}'`)
+        console.log(`The model found field '${field.name}'`);
       }
     }
   }
-  if (response.trainingDocuments) {
-    for (const doc of response.trainingDocuments) {
+  // Training document information
+  if (model.trainingDocuments) {
+    for (const doc of model.trainingDocuments) {
       console.log(`Document name: ${doc.documentName}`);
       console.log(`Document status: ${doc.status}`);
       console.log(`Document page count: ${doc.pageCount}`);
@@ -281,7 +288,9 @@ async function main() {
   }
 }
 
-main();
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});
 ```
 
 ### Recognize forms using a custom model
@@ -301,14 +310,12 @@ async function main() {
   const poller = await client.beginRecognizeCustomForms(modelId, readStream, "application/pdf", {
     onProgress: (state) => { console.log(`status: ${state.status}`); }
   });
-  await poller.pollUntilDone();
-  const response = poller.getResult();
+  const forms = await poller.pollUntilDone();
 
-  console.log(response.status);
-  console.log("Forms:")
-  for (const form of response.forms || []) {
+  console.log("Forms:");
+  for (const form of forms || []) {
     console.log(`${form.formType}, page range: ${form.pageRange}`);
-    console.log("Pages:")
+    console.log("Pages:");
     for (const page of form.pages || []) {
       console.log(`Page number: ${page.pageNumber}`);
       console.log("Tables");
@@ -325,12 +332,16 @@ async function main() {
     for (const fieldName in form.fields) {
       // each field is of type FormField
       const field = form.fields[fieldName];
-      console.log(`Field ${fieldName} has value '${field.value}' with a confidence score of ${field.confidence}`)
+      console.log(
+        `Field ${fieldName} has value '${field.value}' with a confidence score of ${field.confidence}`
+      );
     }
   }
 }
 
-main()
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});
 ```
 
 ### Listing all models
@@ -343,10 +354,10 @@ const { FormTrainingClient, AzureKeyCredential } = require("@azure/ai-form-recog
 async function main() {
   const endpoint = "<cognitive services endpoint>";
   const apiKey = "<api key>";
-  const trainingClient = new FormTrainingClient(endpoint, new AzureKeyCredential(apiKey));
+  const client = new FormTrainingClient(endpoint, new AzureKeyCredential(apiKey));
 
   // returns an async iteratable iterator that supports paging
-  const result = await trainingClient.listCustomModels();
+  const result = client.listCustomModels();
   let i = 0;
   for await (const modelInfo of result) {
     console.log(`model ${i++}:`);
@@ -355,7 +366,7 @@ async function main() {
 
   // using `iter.next()`
   i = 1;
-  let iter = trainingClient.listCustomModels();
+  let iter = client.listCustomModels();
   let modelItem = await iter.next();
   while (!modelItem.done) {
     console.log(`model ${i++}: ${modelItem.value.modelId}`);
@@ -364,14 +375,17 @@ async function main() {
 
   // using `byPage()`
   i = 1;
-  for await (const response of trainingClient.listCustomModels().byPage()) {
+  for await (const response of client.listCustomModels().byPage()) {
     for (const modelInfo of response.modelList) {
       console.log(`model ${i++}: ${modelInfo.modelId}`);
     }
   }
 }
 
-main();
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});
+
 ```
 
 ## Troubleshooting
@@ -411,6 +425,6 @@ If you'd like to contribute to this library, please read the [contributing guide
 [multi_and_single_service]: https://docs.microsoft.com/azure/cognitive-services/cognitive-services-apis-create-account?tabs=multiservice%2Cwindows
 [azure_portal_create_FR_resource]: https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesFormRecognizer
 [azure_cli_create_FR_resource]: https://docs.microsoft.com/azure/cognitive-services/cognitive-services-apis-create-account-cli?tabs=windows
-[fr-labeling-tool]: https://docs.microsoft.com/en-us/azure/cognitive-services/form-recognizer/quickstarts/label-tool
-[fr-train-without-labels]: https://docs.microsoft.com/en-us/azure/cognitive-services/form-recognizer/overview#train-without-labels
-[fr-train-with-labels]: https://docs.microsoft.com/en-us/azure/cognitive-services/form-recognizer/overview#train-with-labels
+[fr-labeling-tool]: https://docs.microsoft.com/azure/cognitive-services/form-recognizer/quickstarts/label-tool
+[fr-train-without-labels]: https://docs.microsoft.com/azure/cognitive-services/form-recognizer/overview#train-without-labels
+[fr-train-with-labels]: https://docs.microsoft.com/azure/cognitive-services/form-recognizer/overview#train-with-labels
