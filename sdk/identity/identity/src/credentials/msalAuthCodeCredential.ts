@@ -11,6 +11,8 @@ import express from "express";
 import msal from "azure-msal-node";
 import open from "open";
 
+import { Socket } from "net";
+
 import myLocalCache from "./data/cache.json";
 //import {} from "fs";
 
@@ -87,9 +89,10 @@ export class MsalAuthCodeCredential implements TokenCredential {
     };
 
     let self = this;
+    let socketToDestroy: Socket | undefined = undefined;
     
     return new Promise(function(resolve, reject) {
-      let p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response) => {
+      let p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
         open(response);
         console.log(response);
       });
@@ -105,6 +108,9 @@ export class MsalAuthCodeCredential implements TokenCredential {
         self.pca.acquireTokenByCode(tokenRequest).then((authResponse: any) => {
           res.sendStatus(200);
           listen.close();
+          if (socketToDestroy) {
+            socketToDestroy.destroy();
+          }
           resolve({expiresOnTimestamp: authResponse.expiresOnTimestamp, token: authResponse.accessToken});
         }).catch((error: any) => {
           console.log(error);
@@ -115,6 +121,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
       //await this.msalCacheManager.readFromPersistence();
       /*.then(self.msalCacheManager.writeToPersistence)*/
       let listen = app.listen(SERVER_PORT, () => console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`));
+      listen.on("connection", (socket) => socketToDestroy = socket)
     });
   }
 }
