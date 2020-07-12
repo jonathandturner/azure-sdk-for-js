@@ -155,6 +155,12 @@ export class MsalAuthCodeCredential implements TokenCredential {
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
     }
 
+// @public (undocumented)
+export class MsalDeviceCodeCredential implements TokenCredential {
+    constructor(tenandId: string, clientId: string, options?: TokenCredentialOptions);
+    getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
+    }
+
 export { TokenCredential }
 
 // @public

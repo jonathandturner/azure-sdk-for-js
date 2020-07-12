@@ -17,6 +17,7 @@
     "./dist-esm/src/credentials/authorizationCodeCredential.js": "./dist-esm/src/credentials/authorizationCodeCredential.browser.js",
     "./dist-esm/src/credentials/interactiveBrowserCredential.js": "./dist-esm/src/credentials/interactiveBrowserCredential.browser.js",
     "./dist-esm/src/credentials/msalAuthCodeCredential.js": "./dist-esm/src/credentials/msalAuthCodeCredential.browser.js",
+    "./dist-esm/src/credentials/msalDeviceCodeCredential.js": "./dist-esm/src/credentials/msalDeviceCodeCredential.browser.js",
     "./dist-esm/src/credentials/vscodeCredential.js": "./dist-esm/src/credentials/vscodeCredential.browser.js",
     "./dist-esm/src/util/authHostEnv.js": "./dist-esm/src/util/authHostEnv.browser.js"
   },
