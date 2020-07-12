@@ -7,7 +7,6 @@ import { TokenCredentialOptions, IdentityClient } from "../client/identityClient
 
 const { promises: fs } = require("fs");
 
-import express from "express";
 import msal from "@azure/msal-node";
 
 export class MsalDeviceCodeCredential implements TokenCredential {
@@ -47,12 +46,6 @@ export class MsalDeviceCodeCredential implements TokenCredential {
           cachePlugin
       },
     };
-// const msalConfig = {
-//     auth: {
-//         clientId: "6c04f413-f6e7-4690-b372-dbdd083e7e5a",
-//         authority: "https://login.microsoftonline.com/sgonz.onmicrosoft.com",
-//     }
-// };
 
     this.pca = new msal.PublicClientApplication(publicClientConfig);
     //this.msalCacheManager = this.pca.getCacheManager();
@@ -75,7 +68,6 @@ export class MsalDeviceCodeCredential implements TokenCredential {
     let scopeArray = typeof scopes === "object" ? scopes : [scopes];
 
     // Create Express App and Routes
-    const app = express();
     var complete = false;
     var authResponse: any = undefined;
 
