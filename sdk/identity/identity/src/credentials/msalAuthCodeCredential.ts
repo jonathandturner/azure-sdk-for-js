@@ -8,22 +8,17 @@ import { TokenCredentialOptions, IdentityClient } from "../client/identityClient
 const { promises: fs } = require("fs");
 
 import express from "express";
-import msal from "azure-msal-node";
+import msal from "@azure/msal-node";
 import open from "open";
 
 import { Socket } from "net";
-
-import myLocalCache from "./data/cache.json";
-//import {} from "fs";
-
-//import extensions from "azure-msal-extensions";
 
 const SERVER_PORT = process.env.PORT || 80;
 
 export class MsalAuthCodeCredential implements TokenCredential {
   private identityClient: IdentityClient;
   private pca: msal.PublicClientApplication;
-  private msalCacheManager: msal.CacheManager;
+  //private msalCacheManager: msal.CacheManager;
   private tenantId: string;
   private clientId: string;
 
@@ -59,7 +54,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
       },
     };
     this.pca = new msal.PublicClientApplication(publicClientConfig);
-    this.msalCacheManager = this.pca.getCacheManager();
+    //this.msalCacheManager = this.pca.getCacheManager();
   }
 
   /**
@@ -113,8 +108,8 @@ export class MsalAuthCodeCredential implements TokenCredential {
           }
           resolve({expiresOnTimestamp: authResponse.expiresOnTimestamp, token: authResponse.accessToken});
         }).catch((error: any) => {
-          console.log(error);
           res.status(500).send(error);
+          reject(new Error(`Authentication Error "${req.query["error"]}":\n\n${req.query["error_description"]}`));
         });
       });
 
