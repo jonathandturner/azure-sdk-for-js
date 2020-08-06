@@ -10,10 +10,19 @@ const { promises: fs } = require("fs");
 import express from "express";
 import msal from "@azure/msal-node";
 import open from "open";
+import path from "path";
 
 import { Socket } from "net";
 
+let extensions: any;
+try {
+  extensions = require("@azure/msal-node-extension");
+} catch (er) {
+  extensions = null;
+}
+
 const SERVER_PORT = process.env.PORT || 80;
+const cachePath = path.join(__dirname, "./cache.json");
 
 export class MsalAuthCodeCredential implements TokenCredential {
   private identityClient: IdentityClient;
@@ -22,26 +31,28 @@ export class MsalAuthCodeCredential implements TokenCredential {
   private tenantId: string;
   private clientId: string;
 
-  constructor(tenandId: string, clientId: string, options?: TokenCredentialOptions) {
+  constructor(tenandId: string, clientId: string, cacheOptions?: {cachePlugin?: {
+    readFromStorage: () => Promise<string>;
+    writeToStorage: (getMergedState: (oldState: string) => string) => Promise<void>;
+  } }, options?: TokenCredentialOptions) {
     this.identityClient = new IdentityClient(options);
     this.tenantId = tenandId;
     this.clientId = clientId;
 
-    const readFromStorage = () => {
-        return fs.readFile("./data/cache.json", "utf-8");
-    };
-    const writeToStorage = (getMergedState: any) => {
-        return readFromStorage().then((oldFile: any) =>{
-            const mergedState = getMergedState(oldFile);
-            return fs.writeFile("./data/cacheAfterWrite.json", mergedState);
-        })
-    };
-    const cachePlugin = {
-        readFromStorage,
-        writeToStorage
-    };
-
     // this.cachePlugin = cachePlugin;
+    // const readFromStorage = () => {
+    //     return fs.readFile("./data/cache.json", "utf-8");
+    // };
+    // const writeToStorage = (getMergedState: any) => {
+    //     return readFromStorage().then((oldFile: any) =>{
+    //         const mergedState = getMergedState(oldFile);
+    //         return fs.writeFile("./data/cacheAfterWrite.json", mergedState);
+    //     })
+    // };
+    // const cachePlugin = {
+    //     readFromStorage,
+    //     writeToStorage
+    // };
 
     const publicClientConfig = {
       auth: {
@@ -49,9 +60,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
           authority: "https://login.microsoftonline.com/" + this.tenantId,
           redirectUri: "http://localhost",
       },
-      cache: {
-          cachePlugin
-      },
+      cache: cacheOptions
     };
     this.pca = new msal.PublicClientApplication(publicClientConfig);
     //this.msalCacheManager = this.pca.getCacheManager();
@@ -119,4 +128,24 @@ export class MsalAuthCodeCredential implements TokenCredential {
       listen.on("connection", (socket) => socketToDestroy = socket)
     });
   }
+}
+
+async function createPersistence(){
+    // On Windows, uses a DPAPI encrypted file
+    if(process.platform === "win32"){
+        return extensions.FilePersistenceWithDataProtection.create(cachePath, extensions.DataProtectionScope.LocalMachine);
+    }
+
+    // On Mac, uses keychain.
+    if(process.platform === "darwin"){
+        return extensions.KeychainPersistence.create(cachePath, "serviceName", "accountName");
+    }
+
+    // On Linux, uses  libsecret to store to secret service. Libsecret has to be installed.
+    if(process.platform === "linux"){
+        return extensions.LibSecretPersistence.create(cachePath, "serviceName", "accountName");
+    }
+
+    // fall back to using plain text file. Not recommended for storing secrets.
+    return extensions.FilePersistence.create(cachePath);
 }
