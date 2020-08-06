@@ -42,20 +42,20 @@ export class MsalAuthCodeCredential implements TokenCredential {
            },
            options?: TokenCredentialOptions
          ) {
-                                                  this.identityClient = new IdentityClient(options);
-                                                  this.tenantId = tenandId;
-                                                  this.clientId = clientId;
+           this.identityClient = new IdentityClient(options);
+           this.tenantId = tenandId;
+           this.clientId = clientId;
 
-                                                  // this.cachePlugin = cachePlugin;
-                                                  // const readFromStorage = () => {
-                                                                                                                                //     return fs.readFile("./data/cache.json", "utf-8");
-                                                                                         // };
-                                                // const writeToStorage = (getMergedState: any) => {
-                                                  //     return readFromStorage().then((oldFile: any) =>{
+           // this.cachePlugin = cachePlugin;
+           // const readFromStorage = () => {
+           //     return fs.readFile("./data/cache.json", "utf-8");
+           // };
+           // const writeToStorage = (getMergedState: any) => {
+           //     return readFromStorage().then((oldFile: any) =>{
            //                                                const mergedState = getMergedState(oldFile);
-                                                  //         return fs.writeFile("./data/cacheAfterWrite.json", mergedState);
-                                                  //     })
-                                                  // };
+           //         return fs.writeFile("./data/cacheAfterWrite.json", mergedState);
+           //     })
+           // };
            // const cachePlugin = {
            //     readFromStorage,
            //     writeToStorage
@@ -63,19 +63,15 @@ export class MsalAuthCodeCredential implements TokenCredential {
 
            const publicClientConfig = {
              auth: {
-                                                    clientId: this.clientId,
-                                                    authority:
-                                                 "https://login.microsoftonline.com/" +
-                                                 this.tenantId,
-                                                    redirectUri: "http://localhost"
-                                                    },
-                                                    cache: cacheOptions
+               clientId: this.clientId,
+               authority: "https://login.microsoftonline.com/" + this.tenantId,
+               redirectUri: "http://localhost"
+             },
+             cache: cacheOptions
            };
-                                                                                         this.pca = new msal.PublicClientApplication(
-                                             publicClientConfig
-                                           );
-                                                  //this.msalCacheManager = this.pca.getCacheManager();
-                                                }
+           this.pca = new msal.PublicClientApplication(publicClientConfig);
+           //this.msalCacheManager = this.pca.getCacheManager();
+         }
 
          /**
           * Authenticates with Azure Active Directory and returns an access token if
@@ -104,9 +100,9 @@ export class MsalAuthCodeCredential implements TokenCredential {
            };
 
            let self = this;
-           let socketToDestroy: Socket | undefined = undefined ;
+           let socketToDestroy: Socket | undefined = undefined;
 
-       return new Promise(function(resolve, reject) {
+           return new Promise(function(resolve, reject) {
              let p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
                open(response);
                console.log(response);
@@ -114,7 +110,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
 
              app.get("/", (req, res) => {
                console.log("Inside the redirect");
-             const tokenRequest: msal.AuthorizationCodeRequest = {
+               const tokenRequest: msal.AuthorizationCodeRequest = {
                  code: req.query.code as string,
                  redirectUri: "http://localhost",
                  scopes: scopeArray
