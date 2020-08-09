@@ -85,6 +85,7 @@ export class DefaultAzureCredential extends ChainedTokenCredential {
 
 // @public
 export interface DefaultAzureCredentialOptions extends TokenCredentialOptions {
+    managedIdentityClientId?: string;
     tenantId?: string;
 }
 
@@ -152,7 +153,12 @@ export class ManagedIdentityCredential implements TokenCredential {
 
 // @public (undocumented)
 export class MsalAuthCodeCredential implements TokenCredential {
-    constructor(tenandId: string, clientId: string, options?: TokenCredentialOptions);
+    constructor(tenandId: string, clientId: string, cacheOptions?: {
+        cachePlugin?: {
+            readFromStorage: () => Promise<string>;
+            writeToStorage: (getMergedState: (oldState: string) => string) => Promise<void>;
+        };
+    }, options?: TokenCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
     }
 
@@ -176,13 +182,13 @@ export class UsernamePasswordCredential implements TokenCredential {
     }
 
 // @public
-export class VSCodeCredential implements TokenCredential {
-    constructor(options?: VSCodeCredentialOptions);
+export class VisualStudioCodeCredential implements TokenCredential {
+    constructor(options?: VisualStudioCodeCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
     }
 
 // @public
-export interface VSCodeCredentialOptions extends TokenCredentialOptions {
+export interface VisualStudioCodeCredentialOptions extends TokenCredentialOptions {
     tenantId?: string;
 }
 

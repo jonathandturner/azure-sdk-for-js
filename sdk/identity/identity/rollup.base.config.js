@@ -13,7 +13,7 @@ const production = process.env.NODE_ENV === "production";
 
 export function nodeConfig(test = false) {
   const additionalExternals = ["msal-keytar", "axios", "express"];
-  const externalNodeBuiltins = ["crypto", "events", "fs", "child_process"];
+  const externalNodeBuiltins = ["crypto", "events", "fs", "os", "path", "child_process"];
   const baseConfig = {
     input: input,
     external: depNames.concat(externalNodeBuiltins, additionalExternals),
