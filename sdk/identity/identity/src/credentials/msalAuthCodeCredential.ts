@@ -67,19 +67,16 @@ export class MsalAuthCodeCredential implements TokenCredential {
   }
 
   /**
-  * Authenticates with Azure Active Directory and returns an access token if
-  * successful.  If authentication cannot be performed at this time, this method may
-  * return null.  If an error occurs during authentication, an {@link AuthenticationError}
-  * containing failure details will be thrown.
-  *
-  * @param scopes The list of scopes for which the token will have access.
-  * @param options The options used to configure any requests this
-  *                TokenCredential implementation might make.
-  */
-  getToken(
-    scopes: string | string[],
-    options?: GetTokenOptions
-  ): Promise<AccessToken | null> {
+   * Authenticates with Azure Active Directory and returns an access token if
+   * successful.  If authentication cannot be performed at this time, this method may
+   * return null.  If an error occurs during authentication, an {@link AuthenticationError}
+   * containing failure details will be thrown.
+   *
+   * @param scopes The list of scopes for which the token will have access.
+   * @param options The options used to configure any requests this
+   *                TokenCredential implementation might make.
+   */
+  getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null> {
     let scopeArray = typeof scopes === "object" ? scopes : [scopes];
 
     // Create Express App and Routes
@@ -142,12 +139,15 @@ export class MsalAuthCodeCredential implements TokenCredential {
   }
 }
 
-async function createPersistence(): Promise<{
+async function createPersistence(): Promise<
+  | {
       cachePlugin?: {
         readFromStorage: () => Promise<string>;
         writeToStorage: (getMergedState: (oldState: string) => string) => Promise<void>;
       };
-    } | undefined> {
+    }
+  | undefined
+> {
   let extensions: any;
   try {
     extensions = require("@azure/msal-node-extension");
@@ -156,18 +156,21 @@ async function createPersistence(): Promise<{
   }
 
   // On Windows, uses a DPAPI encrypted file
-  if(process.platform === "win32"){
-      return extensions.FilePersistenceWithDataProtection.create(cachePath, extensions.DataProtectionScope.LocalMachine);
+  if (process.platform === "win32") {
+    return extensions.FilePersistenceWithDataProtection.create(
+      cachePath,
+      extensions.DataProtectionScope.LocalMachine
+    );
   }
 
   // On Mac, uses keychain.
-  if(process.platform === "darwin"){
-      return extensions.KeychainPersistence.create(cachePath, "serviceName", "accountName");
+  if (process.platform === "darwin") {
+    return extensions.KeychainPersistence.create(cachePath, "serviceName", "accountName");
   }
 
   // On Linux, uses  libsecret to store to secret service. Libsecret has to be installed.
-  if(process.platform === "linux"){
-      return extensions.LibSecretPersistence.create(cachePath, "serviceName", "accountName");
+  if (process.platform === "linux") {
+    return extensions.LibSecretPersistence.create(cachePath, "serviceName", "accountName");
   }
 
   // fall back to using plain text file. Not recommended for storing secrets.
