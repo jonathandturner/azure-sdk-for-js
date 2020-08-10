@@ -12,7 +12,6 @@ import msal from "@azure/msal-node";
 export class MsalDeviceCodeCredential implements TokenCredential {
   private identityClient: IdentityClient;
   private pca: msal.PublicClientApplication;
-  //private msalCacheManager: msal.CacheManager;
   private tenantId: string;
   private clientId: string;
 
@@ -35,8 +34,6 @@ export class MsalDeviceCodeCredential implements TokenCredential {
         writeToStorage
     };
 
-    // this.cachePlugin = cachePlugin;
-
     const publicClientConfig = {
       auth: {
           clientId: this.clientId,
@@ -48,7 +45,6 @@ export class MsalDeviceCodeCredential implements TokenCredential {
     };
 
     this.pca = new msal.PublicClientApplication(publicClientConfig);
-    //this.msalCacheManager = this.pca.getCacheManager();
   }
 
   /**
