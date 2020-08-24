@@ -153,12 +153,13 @@ export class ManagedIdentityCredential implements TokenCredential {
 
 // @public (undocumented)
 export class MsalAuthCodeCredential implements TokenCredential {
+    // Warning: (ae-forgotten-export) The symbol "AuthenticationRecord" needs to be exported by the entry point index.d.ts
     constructor(tenandId: string, clientId: string, cacheOptions?: {
         cachePlugin?: {
             readFromStorage: () => Promise<string>;
             writeToStorage: (getMergedState: (oldState: string) => string) => Promise<void>;
         };
-    }, options?: TokenCredentialOptions);
+    }, authenticationRecord?: AuthenticationRecord, options?: TokenCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
     }
 
