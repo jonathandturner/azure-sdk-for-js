@@ -1,7 +1,5 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 import { AccessToken, TokenCredential, GetTokenOptions, delay } from "@azure/core-http";
 import { TokenCredentialOptions, IdentityClient } from "../client/identityClient";
 
@@ -28,7 +26,7 @@ interface AuthenticationRecord {
 export class MsalAuthCodeCredential implements TokenCredential {
   private identityClient: IdentityClient;
   private pca: msal.PublicClientApplication;
-  private msalCacheManager: any; //FIXME
+  private msalCacheManager: msal.TokenCache;
   private tenantId: string;
   private clientId: string;
   private persistenceEnabled: boolean;
@@ -49,7 +47,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
     this.identityClient = new IdentityClient(options);
     this.tenantId = tenandId;
     this.clientId = clientId;
-    this.persistenceEnabled = cacheOptions != undefined;
+    this.persistenceEnabled = cacheOptions !== undefined;
     this.authenticationRecord = authenticationRecord;
 
     const publicClientConfig = {
@@ -75,28 +73,28 @@ export class MsalAuthCodeCredential implements TokenCredential {
    *                TokenCredential implementation might make.
    */
   getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null> {
-    let scopeArray = typeof scopes === "object" ? scopes : [scopes];
+    const scopeArray = typeof scopes === "object" ? scopes : [scopes];
 
     // Create Express App and Routes
     const app = express();
-    var complete = false;
-    var authResponse: any = undefined;
+    const complete = false;
+    const authResponse: any = undefined;
 
     const authCodeUrlParameters = {
       scopes: scopeArray,
       redirectUri: "http://localhost"
     };
 
-    let self = this;
+    const self = this;
     let socketToDestroy: Socket | undefined = undefined;
 
     return new Promise(function(resolve, reject) {
       if (self.authenticationRecord && self.persistenceEnabled) {
         self.msalCacheManager.readFromPersistence().then(() => {
-          let contents = self.msalCacheManager.serialize();
+          const contents = self.msalCacheManager.serialize();
           console.log(JSON.parse(contents));
           
-          let accounts = self.msalCacheManager.getAllAccounts();
+          const accounts = self.msalCacheManager.getAllAccounts();
           console.log("Accounts: ", accounts);
 
           const silentRequest = {
@@ -106,23 +104,28 @@ export class MsalAuthCodeCredential implements TokenCredential {
 
           console.log("silent request: ", silentRequest);
 
-          self.pca.acquireTokenSilent(silentRequest).then((response) => {
+          return self.pca.acquireTokenSilent(silentRequest).then((response) => {
             console.log("\nSuccessful silent token acquisition:\nResponse: \n:", response);
             resolve({
               expiresOnTimestamp: response.expiresOn.getTime(),
               token: response.accessToken
-            });        
+            });
+            return;        
           });
-        })
+        }).catch((reason)=> {
+          reject(reason);
+        });
       } else {
-        let p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
+        const p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
           open(response);
+          return;
         }).then(() => {
           if (self.persistenceEnabled) {
             self.msalCacheManager.readFromPersistence().then(() => {
               console.log("Result: ", self.msalCacheManager.serialize());
             })
           }
+          return;
         });
 
         app.get("/", (req, res) => {
@@ -149,6 +152,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
                 expiresOnTimestamp: authResponse.expiresOnTimestamp,
                 token: authResponse.accessToken
               });
+              return;
             })
             .catch((error: any) => {
               res.status(500).send(error);
