@@ -73,12 +73,18 @@ export class MsalDeviceCodeCredential implements TokenCredential {
     };
 
     return new Promise(function(resolve, reject) {
-      const p = self.pca.acquireTokenByDeviceCode(deviceCodeRequest).then((stringResponse: any) => {
-        const deviceResponse = JSON.parse(stringResponse);
-        resolve({expiresOnTimestamp: deviceResponse.expiresOnTimestamp, token: deviceResponse.access_token});
-      }).catch((error) => {
-        reject(new Error(`Device Authentication Error "${JSON.stringify(error)}"`));
-      });
+      const p = self.pca
+        .acquireTokenByDeviceCode(deviceCodeRequest)
+        .then((stringResponse: any) => {
+          const deviceResponse = JSON.parse(stringResponse);
+          resolve({
+            expiresOnTimestamp: deviceResponse.expiresOnTimestamp,
+            token: deviceResponse.access_token
+          });
+        })
+        .catch((error) => {
+          reject(new Error(`Device Authentication Error "${JSON.stringify(error)}"`));
+        });
     });
   }
 }
