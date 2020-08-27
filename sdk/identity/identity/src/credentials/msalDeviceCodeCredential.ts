@@ -59,13 +59,13 @@ export class MsalDeviceCodeCredential implements TokenCredential {
     scopes: string | string[],
     options?: GetTokenOptions
   ): Promise<AccessToken | null> {
-    let scopeArray = typeof scopes === "object" ? scopes : [scopes];
+    const scopeArray = typeof scopes === "object" ? scopes : [scopes];
 
     // Create Express App and Routes
-    var complete = false;
-    var authResponse: any = undefined;
+    const complete = false;
+    const authResponse: any = undefined;
 
-    let self = this;
+    const self = this;
 
     const deviceCodeRequest = {
       deviceCodeCallback: (response: any) => (console.log(response.message)),
@@ -73,15 +73,12 @@ export class MsalDeviceCodeCredential implements TokenCredential {
     };
 
     return new Promise(function(resolve, reject) {
-      let p = self.pca.acquireTokenByDeviceCode(deviceCodeRequest).then((stringResponse: any) => {
-        let deviceResponse = JSON.parse(stringResponse);
+      const p = self.pca.acquireTokenByDeviceCode(deviceCodeRequest).then((stringResponse: any) => {
+        const deviceResponse = JSON.parse(stringResponse);
         resolve({expiresOnTimestamp: deviceResponse.expiresOnTimestamp, token: deviceResponse.access_token});
       }).catch((error) => {
         reject(new Error(`Device Authentication Error "${JSON.stringify(error)}"`));
       });
-
-      //await this.msalCacheManager.readFromPersistence();
-      /*.then(self.msalCacheManager.writeToPersistence)*/
     });
   }
 }

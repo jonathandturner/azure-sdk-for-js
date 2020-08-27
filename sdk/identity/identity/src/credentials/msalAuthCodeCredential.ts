@@ -85,26 +85,25 @@ export class MsalAuthCodeCredential implements TokenCredential {
       redirectUri: "http://localhost"
     };
 
-    const self = this;
     let socketToDestroy: Socket | undefined = undefined;
 
-    return new Promise(function(resolve, reject) {
-      if (self.authenticationRecord && self.persistenceEnabled) {
-        self.msalCacheManager.readFromPersistence().then(() => {
-          const contents = self.msalCacheManager.serialize();
+    return new Promise((resolve, reject) => {
+      if (this.authenticationRecord && this.persistenceEnabled) {
+        this.msalCacheManager.readFromPersistence().then(() => {
+          const contents = this.msalCacheManager.serialize();
           console.log(JSON.parse(contents));
           
-          const accounts = self.msalCacheManager.getAllAccounts();
+          const accounts = this.msalCacheManager.getAllAccounts();
           console.log("Accounts: ", accounts);
 
           const silentRequest = {
-            account: self.authenticationRecord!,
+            account: this.authenticationRecord!,
             scopes: ['https://vault.azure.net/user_impersonation', 'https://vault.azure.net/.default'],
           };
 
           console.log("silent request: ", silentRequest);
 
-          return self.pca.acquireTokenSilent(silentRequest).then((response) => {
+          return this.pca.acquireTokenSilent(silentRequest).then((response) => {
             console.log("\nSuccessful silent token acquisition:\nResponse: \n:", response);
             resolve({
               expiresOnTimestamp: response.expiresOn.getTime(),
@@ -116,13 +115,16 @@ export class MsalAuthCodeCredential implements TokenCredential {
           reject(reason);
         });
       } else {
-        const p = self.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
+        const p = this.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
           open(response);
           return;
         }).then(() => {
-          if (self.persistenceEnabled) {
-            self.msalCacheManager.readFromPersistence().then(() => {
-              console.log("Result: ", self.msalCacheManager.serialize());
+          if (this.persistenceEnabled) {
+            this.msalCacheManager.readFromPersistence().then(() => {
+              console.log("Result: ", this.msalCacheManager.serialize());
+              return;
+            }).catch(() => {
+              console.log("Cache could not be read")
             })
           }
           return;
@@ -135,13 +137,13 @@ export class MsalAuthCodeCredential implements TokenCredential {
             scopes: scopeArray
           };
 
-          self.pca
+          this.pca
             .acquireTokenByCode(tokenRequest)
             .then((authResponse: any) => {
               res.sendStatus(200);
               console.log("authResponse: ", authResponse);
-              if (self.persistenceEnabled) {
-                self.msalCacheManager.writeToPersistence();
+              if (this.persistenceEnabled) {
+                this.msalCacheManager.writeToPersistence();
               }
 
               listen.close();
@@ -152,7 +154,6 @@ export class MsalAuthCodeCredential implements TokenCredential {
                 expiresOnTimestamp: authResponse.expiresOnTimestamp,
                 token: authResponse.accessToken
               });
-              return;
             })
             .catch((error: any) => {
               res.status(500).send(error);
@@ -164,7 +165,7 @@ export class MsalAuthCodeCredential implements TokenCredential {
             });
         });
 
-        let listen = app.listen(SERVER_PORT, () =>
+        const listen = app.listen(SERVER_PORT, () =>
           console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`)
         );
         listen.on("connection", (socket) => (socketToDestroy = socket));
