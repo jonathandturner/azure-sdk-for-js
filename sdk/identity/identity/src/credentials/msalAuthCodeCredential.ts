@@ -9,6 +9,7 @@ import express from "express";
 import msal from "@azure/msal-node";
 import open from "open";
 import path from "path";
+import http from "http";
 
 import { Socket } from "net";
 
@@ -75,100 +76,116 @@ export class MsalAuthCodeCredential implements TokenCredential {
   getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null> {
     const scopeArray = typeof scopes === "object" ? scopes : [scopes];
 
-    // Create Express App and Routes
-    const app = express();
-    const complete = false;
-    const authResponse: any = undefined;
+    if (this.authenticationRecord && this.persistenceEnabled) {
+      return this.acquireTokenFromCache();
+    } else {
+      return this.acquireTokenFromBrowser(scopeArray);
+    }
+  }
 
+  private async acquireTokenFromCache(): Promise<AccessToken | null> {
+    await this.msalCacheManager.readFromPersistence();
+    const contents = this.msalCacheManager.serialize();
+    console.log(JSON.parse(contents));
+    
+    const accounts = this.msalCacheManager.getAllAccounts();
+    console.log("Accounts: ", accounts);
+
+    const silentRequest = {
+      account: this.authenticationRecord!,
+      scopes: ['https://vault.azure.net/user_impersonation', 'https://vault.azure.net/.default'],
+    };
+
+    console.log("silent request: ", silentRequest);
+
+    const response = await this.pca.acquireTokenSilent(silentRequest);
+    
+    console.log("\nSuccessful silent token acquisition:\nResponse: \n:", response);
+    return {
+      expiresOnTimestamp: response.expiresOn.getTime(),
+      token: response.accessToken
+    };    
+  }
+
+  private async openAuthCodeUrl(scopeArray: string[]): Promise<void> {
     const authCodeUrlParameters = {
       scopes: scopeArray,
       redirectUri: "http://localhost"
     };
 
-    let socketToDestroy: Socket | undefined = undefined;
+    const response = await this.pca.getAuthCodeUrl(authCodeUrlParameters);
+    await open(response);
+    if (this.persistenceEnabled) {
+      try {
+        await this.msalCacheManager.readFromPersistence();
+        console.log("Result: ", this.msalCacheManager.serialize());
+      } catch(e) {
+        console.log("Cache could not be read");
+        throw e;
+      }
+    }
+  }
 
-    return new Promise((resolve, reject) => {
-      if (this.authenticationRecord && this.persistenceEnabled) {
-        this.msalCacheManager.readFromPersistence().then(() => {
-          const contents = this.msalCacheManager.serialize();
-          console.log(JSON.parse(contents));
-          
-          const accounts = this.msalCacheManager.getAllAccounts();
-          console.log("Accounts: ", accounts);
+  private async acquireTokenFromBrowser(scopeArray: string[]): Promise<AccessToken | null> {
+    
+    return new Promise<AccessToken | null>(async (resolve, reject) => {
+      let listen: http.Server | undefined;
+      let socketToDestroy: Socket | undefined;
 
-          const silentRequest = {
-            account: this.authenticationRecord!,
-            scopes: ['https://vault.azure.net/user_impersonation', 'https://vault.azure.net/.default'],
-          };
+      function cleanup() {
+        if (listen) {
+          listen.close();
+        }
+        if (socketToDestroy) {
+          socketToDestroy.destroy();
+        }
+      }
 
-          console.log("silent request: ", silentRequest);
+      // Create Express App and Routes
+      const app = express();
 
-          return this.pca.acquireTokenSilent(silentRequest).then((response) => {
-            console.log("\nSuccessful silent token acquisition:\nResponse: \n:", response);
-            resolve({
-              expiresOnTimestamp: response.expiresOn.getTime(),
-              token: response.accessToken
-            });
-            return;        
-          });
-        }).catch((reason)=> {
-          reject(reason);
-        });
-      } else {
-        const p = this.pca.getAuthCodeUrl(authCodeUrlParameters).then((response: any) => {
-          open(response);
-          return;
-        }).then(() => {
+      app.get("/", async (req, res) => {
+        const tokenRequest: msal.AuthorizationCodeRequest = {
+          code: req.query.code as string,
+          redirectUri: "http://localhost",
+          scopes: scopeArray
+        };
+
+        try {
+          const authResponse = await this.pca.acquireTokenByCode(tokenRequest);
+          res.sendStatus(200);
+          console.log("authResponse: ", authResponse);
           if (this.persistenceEnabled) {
-            this.msalCacheManager.readFromPersistence().then(() => {
-              console.log("Result: ", this.msalCacheManager.serialize());
-              return;
-            }).catch(() => {
-              console.log("Cache could not be read")
-            })
+            this.msalCacheManager.writeToPersistence();
           }
-          return;
-        });
+          
+          resolve({
+            expiresOnTimestamp: authResponse.expiresOn.valueOf(),
+            token: authResponse.accessToken
+          });
+        } catch (error) {
+          res.status(500).send(error);
 
-        app.get("/", (req, res) => {
-          const tokenRequest: msal.AuthorizationCodeRequest = {
-            code: req.query.code as string,
-            redirectUri: "http://localhost",
-            scopes: scopeArray
-          };
+          reject(
+            new Error(
+              `Authentication Error "${req.query["error"]}":\n\n${req.query["error_description"]}`
+            )
+          );
+        } finally {
+          cleanup();
+        }
+      });
 
-          this.pca
-            .acquireTokenByCode(tokenRequest)
-            .then((authResponse: any) => {
-              res.sendStatus(200);
-              console.log("authResponse: ", authResponse);
-              if (this.persistenceEnabled) {
-                this.msalCacheManager.writeToPersistence();
-              }
+      listen = app.listen(SERVER_PORT, () =>
+        console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`)
+      );
+      listen.on("connection", (socket) => (socketToDestroy = socket));
 
-              listen.close();
-              if (socketToDestroy) {
-                socketToDestroy.destroy();
-              }
-              resolve({
-                expiresOnTimestamp: authResponse.expiresOnTimestamp,
-                token: authResponse.accessToken
-              });
-            })
-            .catch((error: any) => {
-              res.status(500).send(error);
-              reject(
-                new Error(
-                  `Authentication Error "${req.query["error"]}":\n\n${req.query["error_description"]}`
-                )
-              );
-            });
-        });
-
-        const listen = app.listen(SERVER_PORT, () =>
-          console.log(`Msal Node Auth Code Sample app listening on port ${SERVER_PORT}!`)
-        );
-        listen.on("connection", (socket) => (socketToDestroy = socket));
+      try {
+        await this.openAuthCodeUrl(scopeArray);
+      } catch(e) {
+        cleanup();
+        throw e;
       }
     });
   }
