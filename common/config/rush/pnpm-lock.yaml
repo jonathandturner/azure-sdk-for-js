@@ -1,5 +1,6 @@
 dependencies:
   '@rush-temp/abort-controller': 'file:projects/abort-controller.tgz'
+  '@rush-temp/ai-anomaly-detector': 'file:projects/ai-anomaly-detector.tgz'
   '@rush-temp/ai-form-recognizer': 'file:projects/ai-form-recognizer.tgz'
   '@rush-temp/ai-text-analytics': 'file:projects/ai-text-analytics.tgz'
   '@rush-temp/app-configuration': 'file:projects/app-configuration.tgz'
@@ -1479,14 +1480,14 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-1Yj8h9Q+QDF5FzhMs/c9+6UntbD5MkRfRwac8DoEm9ZfUBZ7tZ55YcGVAzEe4bXsdQHEk+s9S5wsOKVdZrw0tQ==
-  /bl/4.0.2:
+  /bl/4.0.3:
     dependencies:
       buffer: 5.6.0
       inherits: 2.0.4
       readable-stream: 3.6.0
     dev: false
     resolution:
-      integrity: sha512-j4OH8f6Qg2bGuWfRiltT2HYGx0e1QcBTrK9KAHNMwMZdQnDZFk0ZSYIpADjYCB3U12nicC5tVJwSIhwOWjb4RQ==
+      integrity: sha512-fs4G6/Hu4/EE+F75J8DuN/0IpQqNjAdC7aEQv7Qt8MHGUH7Ckv2MwTEEeN9QehD0pfIDkMI1bkHYkKy7xHyKIg==
   /blob/0.0.5:
     dev: false
     resolution:
@@ -2804,10 +2805,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
-  /eventemitter3/4.0.6:
+  /eventemitter3/4.0.7:
     dev: false
     resolution:
-      integrity: sha512-s3GJL04SQoM+gn2c14oyqxvZ3Pcq7cduSDqy3sBFXx6UPSUmgVYwQM9zwkTn9je0lrfg0gHEwR42pF3Q2dCQkQ==
+      integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
   /events/3.2.0:
     dev: false
     engines:
@@ -3695,7 +3696,7 @@ packages:
       integrity: sha512-qwHbBLV7WviBl0rQsOzH6o5lwyOIvwp/BdFnvVxXORldu5TmjFfjzBcWUWS5kWAZhmv+JtiDhSuQCp4sBfbIgg==
   /http-proxy/1.18.1:
     dependencies:
-      eventemitter3: 4.0.6
+      eventemitter3: 4.0.7
       follow-redirects: 1.13.0
       requires-port: 1.0.0
     dev: false
@@ -6473,7 +6474,7 @@ packages:
       rollup: '>=0.66.0 <2'
     resolution:
       integrity: sha512-ddgqkH02klveu34TF0JqygPwZnsbhHVI6t8+hGTcYHngPkQb5MIHI0XiztXIN/d6V9j+efwHAqEL7LspSxQXGw==
-  /rollup-plugin-visualizer/4.1.0_rollup@1.32.1:
+  /rollup-plugin-visualizer/4.1.1_rollup@1.32.1:
     dependencies:
       nanoid: 3.1.12
       open: 7.2.0
@@ -6488,7 +6489,7 @@ packages:
     peerDependencies:
       rollup: '>=1.20.0'
     resolution:
-      integrity: sha512-RzsWRrFhZHNM7UQ5wLRsn6Jz3zJHkH+/n1ZaS5h1OTYY4qG7TguSFOFzaM+IA/DSAcloXzGpCi0ue894Jdvv+A==
+      integrity: sha512-aQBukhj8T+1BcOjD/5xB3+mZSSzHIVT+WpQDDEVpmPCkILVX0J7NPOuKEvKIXU+iZLvF7B5/wJA4+wxuH7FNew==
   /rollup-pluginutils/2.8.2:
     dependencies:
       estree-walker: 0.6.1
@@ -7206,7 +7207,7 @@ packages:
       integrity: sha512-9uW5iDvrIMCVpvasdFHW0wJPez0K4JnMZtsuIeDI7HyMGJNxmDZDOCQROr7lXyS+iL/QMpj07qcjGYTSdRFXUg==
   /tar-stream/2.1.3:
     dependencies:
-      bl: 4.0.2
+      bl: 4.0.3
       end-of-stream: 1.4.4
       fs-constants: 1.0.0
       inherits: 2.0.4
@@ -8086,6 +8087,60 @@ packages:
       integrity: sha512-78SPLuZydRyhpdf4wO9uWQf4g8Ebuk5OZWFKmLKTPk42QJtMJpH9l7X1UXW3nh58BUHYairnIHJ0jamYTC6unw==
       tarball: 'file:projects/abort-controller.tgz'
     version: 0.0.0
+  'file:projects/ai-anomaly-detector.tgz':
+    dependencies:
+      '@azure/core-tracing': 1.0.0-preview.9
+      '@microsoft/api-extractor': 7.7.11
+      '@opentelemetry/api': 0.10.2
+      '@rollup/plugin-commonjs': 11.0.2_rollup@1.32.1
+      '@rollup/plugin-json': 4.1.0_rollup@1.32.1
+      '@rollup/plugin-multi-entry': 3.0.1_rollup@1.32.1
+      '@rollup/plugin-node-resolve': 8.4.0_rollup@1.32.1
+      '@rollup/plugin-replace': 2.3.3_rollup@1.32.1
+      '@types/chai': 4.2.12
+      '@types/mocha': 7.0.2
+      '@types/node': 8.10.62
+      '@typescript-eslint/eslint-plugin': 2.34.0_5004700905763c91177aaa7d1d0d56ac
+      '@typescript-eslint/parser': 2.34.0_eslint@6.8.0+typescript@3.9.7
+      chai: 4.2.0
+      cross-env: 7.0.2
+      dotenv: 8.2.0
+      eslint: 6.8.0
+      eslint-config-prettier: 6.11.0_eslint@6.8.0
+      eslint-plugin-no-null: 1.0.2_eslint@6.8.0
+      eslint-plugin-no-only-tests: 2.4.0
+      eslint-plugin-promise: 4.2.1
+      inherits: 2.0.4
+      karma: 5.1.1
+      karma-chrome-launcher: 3.1.0
+      karma-coverage: 2.0.3
+      karma-edge-launcher: 0.4.2_karma@5.1.1
+      karma-env-preprocessor: 0.1.1
+      karma-firefox-launcher: 1.3.0
+      karma-ie-launcher: 1.0.0_karma@5.1.1
+      karma-junit-reporter: 2.0.1_karma@5.1.1
+      karma-mocha: 2.0.1
+      karma-mocha-reporter: 2.2.5_karma@5.1.1
+      karma-remap-istanbul: 0.6.0_karma@5.1.1
+      mocha: 7.2.0
+      mocha-junit-reporter: 1.23.3_mocha@7.2.0
+      nyc: 14.1.1
+      prettier: 1.19.1
+      rimraf: 3.0.2
+      rollup: 1.32.1
+      rollup-plugin-shim: 1.0.0
+      rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
+      rollup-plugin-terser: 5.3.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
+      tslib: 2.0.1
+      typescript: 3.9.7
+      util: 0.12.3
+    dev: false
+    name: '@rush-temp/ai-anomaly-detector'
+    resolution:
+      integrity: sha512-/Wx3xQn+7yw/RY2pmeYMfi3sfyZ5plIwzRBSdrpQ1cXZkNbYoF0Oi4qn3jn8DCT7tx/uhz74niusxU8tFRZDhw==
+      tarball: 'file:projects/ai-anomaly-detector.tgz'
+    version: 0.0.0
   'file:projects/ai-form-recognizer.tgz':
     dependencies:
       '@azure/core-tracing': 1.0.0-preview.9
@@ -8135,7 +8190,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -8194,7 +8249,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -8348,7 +8403,7 @@ packages:
       rimraf: 3.0.2
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       shx: 0.3.2
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -8408,7 +8463,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       tslib: 2.0.1
       typescript: 3.9.7
       util: 0.12.3
@@ -8461,7 +8516,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       tslib: 2.0.1
       typescript: 3.9.7
@@ -8528,7 +8583,7 @@ packages:
       rimraf: 3.0.2
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       shx: 0.3.2
       sinon: 9.0.3
       tough-cookie: 4.0.0
@@ -8592,7 +8647,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -8647,7 +8702,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
       typescript: 3.9.7
@@ -8705,7 +8760,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       tslib: 2.0.1
       typescript: 3.9.7
       util: 0.12.3
@@ -8757,7 +8812,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       tslib: 2.0.1
       typescript: 3.9.7
@@ -8874,7 +8929,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       tslib: 2.0.1
       typescript: 3.9.7
       util: 0.12.3
@@ -9130,7 +9185,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
       typescript: 3.9.7
@@ -9188,7 +9243,7 @@ packages:
       rollup: 1.32.1
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       tslib: 2.0.1
       typescript: 3.9.7
@@ -9227,7 +9282,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       tslib: 2.0.1
       typescript: 3.9.7
@@ -9289,7 +9344,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -9363,7 +9418,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -9427,7 +9482,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       tslib: 2.0.1
@@ -9571,7 +9626,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       tslib: 2.0.1
       typescript: 3.9.7
@@ -9628,7 +9683,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -9769,7 +9824,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       sinon: 9.0.3
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
@@ -9831,7 +9886,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -9897,7 +9952,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -9958,7 +10013,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -10016,7 +10071,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -10076,7 +10131,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       source-map-support: 0.5.19
       ts-node: 8.10.2_typescript@3.9.7
       tslib: 2.0.1
@@ -10135,7 +10190,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       tslib: 2.0.1
       typescript: 3.9.7
       util: 0.12.3
@@ -10222,7 +10277,7 @@ packages:
       rollup-plugin-shim: 1.0.0
       rollup-plugin-sourcemaps: 0.4.2_rollup@1.32.1
       rollup-plugin-terser: 5.3.0_rollup@1.32.1
-      rollup-plugin-visualizer: 4.1.0_rollup@1.32.1
+      rollup-plugin-visualizer: 4.1.1_rollup@1.32.1
       tslib: 2.0.1
       typescript: 3.9.7
       xhr-mock: 2.5.1
@@ -10255,6 +10310,7 @@ packages:
     version: 0.0.0
 specifiers:
   '@rush-temp/abort-controller': 'file:./projects/abort-controller.tgz'
+  '@rush-temp/ai-anomaly-detector': 'file:./projects/ai-anomaly-detector.tgz'
   '@rush-temp/ai-form-recognizer': 'file:./projects/ai-form-recognizer.tgz'
   '@rush-temp/ai-text-analytics': 'file:./projects/ai-text-analytics.tgz'
   '@rush-temp/app-configuration': 'file:./projects/app-configuration.tgz'
