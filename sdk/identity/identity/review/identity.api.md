@@ -130,7 +130,9 @@ export { GetTokenOptions }
 export class InteractiveBrowserCredential implements TokenCredential {
     constructor(options?: InteractiveBrowserCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
+
     }
+
 
 // @public
 export interface InteractiveBrowserCredentialOptions extends TokenCredentialOptions {
