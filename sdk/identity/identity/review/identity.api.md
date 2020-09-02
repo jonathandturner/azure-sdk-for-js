@@ -130,7 +130,7 @@ export { GetTokenOptions }
 export class InteractiveBrowserCredential implements TokenCredential {
     constructor(options?: InteractiveBrowserCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
-}
+    }
 
 // @public
 export interface InteractiveBrowserCredentialOptions extends TokenCredentialOptions {
@@ -148,24 +148,6 @@ export const logger: AzureLogger;
 export class ManagedIdentityCredential implements TokenCredential {
     constructor(clientId: string, options?: TokenCredentialOptions);
     constructor(options?: TokenCredentialOptions);
-    getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
-    }
-
-// @public (undocumented)
-export class MsalAuthCodeCredential implements TokenCredential {
-    // Warning: (ae-forgotten-export) The symbol "AuthenticationRecord" needs to be exported by the entry point index.d.ts
-    constructor(tenandId: string, clientId: string, cacheOptions?: {
-        cachePlugin?: {
-            readFromStorage: () => Promise<string>;
-            writeToStorage: (getMergedState: (oldState: string) => string) => Promise<void>;
-        };
-    }, authenticationRecord?: AuthenticationRecord, options?: TokenCredentialOptions);
-    getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
-    }
-
-// @public (undocumented)
-export class MsalDeviceCodeCredential implements TokenCredential {
-    constructor(tenandId: string, clientId: string, options?: TokenCredentialOptions);
     getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null>;
     }
 

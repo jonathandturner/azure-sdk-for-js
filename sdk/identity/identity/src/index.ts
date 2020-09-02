@@ -27,8 +27,6 @@ export {
   DeviceCodeInfo
 } from "./credentials/deviceCodeCredential";
 
-export { MsalAuthCodeCredential } from "./credentials/msalAuthCodeCredential";
-export { MsalDeviceCodeCredential } from "./credentials/msalDeviceCodeCredential";
 export {
   DefaultAzureCredential,
   DefaultAzureCredentialOptions
