@@ -31,8 +31,9 @@ export class InteractiveBrowserCredential implements TokenCredential {
     const tenantId = (options && options.tenantId) || DefaultTenantId;
     const clientId = (options && options.clientId) || DeveloperSignOnClientId;
 
-    const persistenceEnabled = options?.persistenceEnabled ? options?.persistenceEnabled : false;
-    const authenticationRecord = options?.authenticationRecord;
+    // const persistenceEnabled = options?.persistenceEnabled ? options?.persistenceEnabled : false;
+    // const authenticationRecord = options?.authenticationRecord;
+    const persistenceEnabled = false;
 
     if (options && options.redirectUri) {
       if (typeof options.redirectUri === "string") {
@@ -65,8 +66,8 @@ export class InteractiveBrowserCredential implements TokenCredential {
       { clientId, authority: authorityHost },
       tenantId,
       persistenceEnabled,
-      authenticationRecord,
-      options?.cachePath,
+      undefined,
+      undefined,
       options
     );
   }

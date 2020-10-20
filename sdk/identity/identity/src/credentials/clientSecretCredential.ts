@@ -42,8 +42,9 @@ export class ClientSecretCredential implements TokenCredential {
     clientSecret: string,
     options?: ClientSecretCredentialOptions
   ) {
-    const persistenceEnabled = options?.persistenceEnabled ? options?.persistenceEnabled : false;
-    const authenticationRecord = options?.authenticationRecord;
+    // const persistenceEnabled = options?.persistenceEnabled ? options?.persistenceEnabled : false;
+    // const authenticationRecord = options?.authenticationRecord;
+    const persistenceEnabled = false;
 
     let authorityHost;
     if (options && options.authorityHost) {
@@ -60,8 +61,8 @@ export class ClientSecretCredential implements TokenCredential {
       { clientId, clientSecret, authority: authorityHost },
       tenantId,
       persistenceEnabled,
-      authenticationRecord,
-      options?.cachePath,
+      undefined,
+      undefined,
       options
     );
   }

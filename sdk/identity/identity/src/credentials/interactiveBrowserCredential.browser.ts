@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as msal from "msal";
+import * as msal from "@azure/msal-browser";
 import { AccessToken, TokenCredential, GetTokenOptions } from "@azure/core-http";
 import { IdentityClient } from "../client/identityClient";
+import { AuthenticationRecord } from "../client/msalClient";
 import {
   BrowserLoginStyle,
   InteractiveBrowserCredentialOptions
@@ -23,7 +24,9 @@ const logger = credentialLogger("InteractiveBrowserCredential");
 export class InteractiveBrowserCredential implements TokenCredential {
   private loginStyle: BrowserLoginStyle;
   private msalConfig: msal.Configuration;
-  private msalObject: msal.UserAgentApplication;
+  private msalObject: msal.PublicClientApplication;
+  private redirectUri: string;
+  private authenticationRecord: AuthenticationRecord | undefined;
 
   /**
    * Creates an instance of the InteractiveBrowserCredential with the
@@ -52,12 +55,31 @@ export class InteractiveBrowserCredential implements TokenCredential {
       throw error;
     }
 
+    if (options && options.redirectUri) {
+      if (typeof options.redirectUri === "string") {
+        this.redirectUri = options.redirectUri;
+      } else {
+        this.redirectUri = options.redirectUri();
+      }
+    } else {
+      this.redirectUri = "http://localhost";
+    }
+
+    if (options && options.postLogoutRedirectUri) {
+      if (typeof options.postLogoutRedirectUri === "string") {
+        this.redirectUri = options.postLogoutRedirectUri;
+      } else {
+        this.redirectUri = options.postLogoutRedirectUri();
+      }
+    }
+
+    // this.authenticationRecord = options?.authenticationRecord;
+
     this.msalConfig = {
       auth: {
         clientId: options.clientId!, // we just initialized it above
         authority: `${options.authorityHost}/${options.tenantId}`,
-        ...(options.redirectUri && { redirectUri: options.redirectUri }),
-        ...(options.postLogoutRedirectUri && { redirectUri: options.postLogoutRedirectUri })
+        redirectUri: this.redirectUri,
       },
       cache: {
         cacheLocation: "localStorage",
@@ -65,15 +87,13 @@ export class InteractiveBrowserCredential implements TokenCredential {
       }
     };
 
-    this.msalObject = new msal.UserAgentApplication(this.msalConfig);
+    this.msalObject = new msal.PublicClientApplication(this.msalConfig);
   }
 
-  private login(): Promise<msal.AuthResponse> {
+  private login(): Promise<msal.AuthenticationResult | null> {
     switch (this.loginStyle) {
       case "redirect": {
-        const loginPromise = new Promise<msal.AuthResponse>((resolve, reject) => {
-          this.msalObject.handleRedirectCallback(resolve, reject);
-        });
+        const loginPromise = this.msalObject.handleRedirectPromise();
         this.msalObject.loginRedirect();
         return loginPromise;
       }
@@ -82,10 +102,10 @@ export class InteractiveBrowserCredential implements TokenCredential {
     }
   }
 
-  private async acquireToken(
-    authParams: msal.AuthenticationParameters
-  ): Promise<msal.AuthResponse | undefined> {
-    let authResponse: msal.AuthResponse | undefined;
+  private async acquireTokenSilent(
+    authParams: msal.SilentRequest
+  ): Promise<msal.AuthenticationResult | undefined> {
+    let authResponse: msal.AuthenticationResult | undefined;
     try {
       logger.info("Attempting to acquire token silently");
       authResponse = await this.msalObject.acquireTokenSilent(authParams);
@@ -104,16 +124,14 @@ export class InteractiveBrowserCredential implements TokenCredential {
       }
     }
 
-    let authPromise: Promise<msal.AuthResponse> | undefined;
+    let authPromise: Promise<msal.AuthenticationResult | null>;
     if (authResponse === undefined) {
       logger.info(
         `Silent authentication failed, falling back to interactive method ${this.loginStyle}`
       );
       switch (this.loginStyle) {
         case "redirect":
-          authPromise = new Promise((resolve, reject) => {
-            this.msalObject.handleRedirectCallback(resolve, reject);
-          });
+          authPromise = this.msalObject.handleRedirectPromise();
           this.msalObject.acquireTokenRedirect(authParams);
           break;
         case "popup":
@@ -121,7 +139,8 @@ export class InteractiveBrowserCredential implements TokenCredential {
           break;
       }
 
-      authResponse = authPromise && (await authPromise);
+      const result = authPromise && (await authPromise);
+      authResponse = result ? result : undefined;
     }
 
     return authResponse;
@@ -143,12 +162,32 @@ export class InteractiveBrowserCredential implements TokenCredential {
   ): Promise<AccessToken | null> {
     const { span } = createSpan("InteractiveBrowserCredential-getToken", options);
     try {
-      if (!this.msalObject.getAccount()) {
+      let currentAccounts = this.msalObject.getAllAccounts();
+
+      if (currentAccounts.length == 0) {
         await this.login();
       }
 
-      const authResponse = await this.acquireToken({
-        scopes: Array.isArray(scopes) ? scopes : scopes.split(",")
+      currentAccounts = this.msalObject.getAllAccounts();
+      let accountObj;
+
+      if (!currentAccounts || currentAccounts.length === 0) {
+          // No user signed in
+          return null;
+      } else if (currentAccounts.length > 1) {
+          // More than one user signed in, find desired user with getAccountByUsername(username)
+          if (this.authenticationRecord) {
+            accountObj = this.msalObject.getAccountByUsername(this.authenticationRecord.username);
+          } else {
+            return null;
+          }
+      } else {
+          accountObj = currentAccounts[0];
+      }
+      
+      const authResponse = await this.acquireTokenSilent({
+        scopes: Array.isArray(scopes) ? scopes : scopes.split(","),
+        account: accountObj!
       });
 
       if (authResponse) {
