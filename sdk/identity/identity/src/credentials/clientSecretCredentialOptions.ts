@@ -6,5 +6,4 @@ import { TokenCredentialOptions } from "../client/identityClient";
 /**
  * Defines options for the SubjectNameAndIssuerCredential class.
  */
-export interface ClientSecretCredentialOptions extends TokenCredentialOptions {
-}
+export interface ClientSecretCredentialOptions extends TokenCredentialOptions {}

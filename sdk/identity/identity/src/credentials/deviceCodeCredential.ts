@@ -81,7 +81,7 @@ export class DeviceCodeCredential implements TokenCredential {
     // const persistenceEnabled = options?.persistenceEnabled ? options?.persistenceEnabled : false;
     // const authenticationRecord = options?.authenticationRecord;
     const persistenceEnabled = false;
-  
+
     let authorityHost;
     if (options && options.authorityHost) {
       if (options.authorityHost.endsWith("/")) {

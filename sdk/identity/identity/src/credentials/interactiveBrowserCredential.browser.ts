@@ -79,7 +79,7 @@ export class InteractiveBrowserCredential implements TokenCredential {
       auth: {
         clientId: options.clientId!, // we just initialized it above
         authority: `${options.authorityHost}/${options.tenantId}`,
-        redirectUri: this.redirectUri,
+        redirectUri: this.redirectUri
       },
       cache: {
         cacheLocation: "localStorage",
@@ -172,19 +172,19 @@ export class InteractiveBrowserCredential implements TokenCredential {
       let accountObj;
 
       if (!currentAccounts || currentAccounts.length === 0) {
-          // No user signed in
-          return null;
+        // No user signed in
+        return null;
       } else if (currentAccounts.length > 1) {
-          // More than one user signed in, find desired user with getAccountByUsername(username)
-          if (this.authenticationRecord) {
-            accountObj = this.msalObject.getAccountByUsername(this.authenticationRecord.username);
-          } else {
-            return null;
-          }
+        // More than one user signed in, find desired user with getAccountByUsername(username)
+        if (this.authenticationRecord) {
+          accountObj = this.msalObject.getAccountByUsername(this.authenticationRecord.username);
+        } else {
+          return null;
+        }
       } else {
-          accountObj = currentAccounts[0];
+        accountObj = currentAccounts[0];
       }
-      
+
       const authResponse = await this.acquireTokenSilent({
         scopes: Array.isArray(scopes) ? scopes : scopes.split(","),
         account: accountObj!
